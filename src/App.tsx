@@ -120,7 +120,7 @@ function App() {
       <p>Player HP: {playerHP}</p>
       <p>Monster HP: {monsterHP}</p>
       <section className="flex items-start justify-start flex-col">
-        <section className="">
+        <section className="flex">
           <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
             <div
               className="bg-red-800 h-3 rounded-full dark:bg-red-800"
