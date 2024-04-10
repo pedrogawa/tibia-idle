@@ -1,26 +1,39 @@
 import { useState } from "react";
+import { monsterStore } from "./stores/monsterStore";
 
 import "./App.css";
 import { MonsterStatus } from "./component/MonsterStatus";
+import { playerStore } from "./stores/playerStore";
 import PlayerEquipment from "./component/PlayerEquipment";
 import { calculateLevelExp } from "./utils/calculateLevelExp";
 import {
   DropItem,
   generateLoot,
-  Monster,
   places,
   selectMonster,
 } from "./utils/monsters";
+import { PlayerStatus } from "./component/PlayerStatus";
 
 function App() {
-  const [playerHP, setPlayerHP] = useState(150);
-  const [monsterHP, setMonsterHP] = useState(0);
+  const { monsterHP, setMonsterHP, monster, setMonster } = monsterStore(
+    (state) => ({
+      monsterHP: state.monsterHP,
+      setMonsterHP: state.setMonsterHP,
+      monster: state.monster,
+      setMonster: state.setMonster,
+    })
+  );
+
+  const { player, levelUp, gainExperience, takeDamage } = playerStore(
+    (state) => ({
+      player: state.player,
+      levelUp: state.levelUp,
+      gainExperience: state.gainExperience,
+      takeDamage: state.takeDamage,
+    })
+  );
+
   const [monstersKilled, setMonstersKilled] = useState(0);
-  const [level, setLevel] = useState(1);
-  const [experience, setExperience] = useState(100);
-  const [currentExperience, setCurrentExperience] = useState(0);
-  const [intervalId, setIntervalId] = useState<number | null>(null);
-  const [monster, setMonster] = useState<Monster>();
   const [loot, setLoot] = useState<DropItem[]>([]);
 
   function startHunt() {
@@ -54,35 +67,24 @@ function App() {
 
   function attack(damage: number) {
     const nextMonsterHp = monsterHP - damage;
-
     if (monster) {
       if (nextMonsterHp <= 0) {
         setMonsterHP(monster.hp);
         setMonstersKilled((prevCount) => prevCount + 1);
-
-        const nextCurrExp = currentExperience + monster.experience;
-
-        setCurrentExperience(nextCurrExp);
-
-        const nextLevelExp = calculateLevelExp(level + 1);
-        const nextNextLevel = calculateLevelExp(level + 2);
-
+        const nextCurrExp = player.currentExperience + monster.experience;
+        gainExperience(nextCurrExp);
+        const nextLevelExp = calculateLevelExp(player.level + 1);
+        const nextNextLevel = calculateLevelExp(player.level + 2);
         if (nextCurrExp >= nextLevelExp) {
-          setLevel((prevLevel) => prevLevel + 1);
-          setExperience(nextNextLevel);
+          levelUp(nextNextLevel);
         }
-
         const selectedMonster = selectMonster(places[0]);
         const currentLoot = new Map<string, DropItem>();
-
         const lootDropped = generateLoot(monster.loot);
         const updatedLoot = aggregateLoot(lootDropped.items, currentLoot);
-
         const nextLootArray = Array.from(updatedLoot.values());
         setLoot(nextLootArray);
-
         console.log(loot);
-
         setMonster(selectedMonster);
         setMonsterHP(selectedMonster.hp);
       } else {
@@ -92,28 +94,12 @@ function App() {
         Math.random() * (monster.maxDamage - monster.minDamage) +
           monster.minDamage
       );
-      const nextPlayerHP = playerHP - monsterDamage;
-      setPlayerHP(nextPlayerHP);
+      const nextPlayerHP = player.currentHP - monsterDamage;
+      takeDamage(nextPlayerHP);
     } else {
       window.alert("Needs to select a monster!");
     }
   }
-
-  // const startHunt = () => {
-  //   if (intervalId === null) {
-  //     const id = setInterval(() => {
-  //       attack(5);
-  //     }, 1200);
-  //     setIntervalId(id);
-  //   }
-  // };
-
-  const stopHunt = () => {
-    if (intervalId !== null) {
-      clearInterval(intervalId);
-      setIntervalId(null);
-    }
-  };
 
   return (
     <main className="">
@@ -138,7 +124,7 @@ function App() {
                 <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
                   <div
                     className="bg-blue-600 h-1.5 rounded-full dark:bg-blue-500"
-                    style={{ width: `${currentExperience}%` }}
+                    style={{ width: `50%` }}
                   ></div>
                 </div>
               </td>
@@ -163,28 +149,20 @@ function App() {
       </section>
       <h2>Combat Simulator</h2>
       <p>Monsters Killed: {monstersKilled}</p>
-      <p>Level: {level}</p>
+      <p>Level: {player.level}</p>
       <p>
-        {currentExperience} / {experience}
+        {player.currentExperience} / {player.experience}
       </p>
       <button onClick={startHunt}>Start Hunt!</button>
       <button onClick={() => attack(5)}>Attack!</button>
 
-      <button onClick={stopHunt}>Stop Hunt!</button>
-
-      <p>Player HP: {playerHP}</p>
       <section className="flex gap-16 items-center justify-between">
         <section className="flex items-start justify-start flex-co gap-8 flex-col">
-          <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
-            <div
-              className="bg-red-800 h-3 rounded-full dark:bg-red-800"
-              style={{ width: `85%` }}
-            ></div>
-          </div>
+          <PlayerStatus />
           <PlayerEquipment />
         </section>
         <section>
-          <MonsterStatus monster={monster} monsterHP={monsterHP} />
+          <MonsterStatus />
         </section>
       </section>
     </main>

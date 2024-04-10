@@ -1,11 +1,11 @@
-import { Monster } from "../../utils/monsters";
+import { monsterStore } from "../../stores/monsterStore";
 
-interface MonsterStatusProps {
-  monster?: Monster;
-  monsterHP?: number;
-}
+export function MonsterStatus() {
+  const { monster, monsterHP } = monsterStore((state) => ({
+    monsterHP: state.monsterHP,
+    monster: state.monster,
+  }));
 
-export function MonsterStatus({ monster, monsterHP }: MonsterStatusProps) {
   if (!monster) {
     return (
       <section className="flex items-center justify-center bg-[#363636] p-16 rounded-md">

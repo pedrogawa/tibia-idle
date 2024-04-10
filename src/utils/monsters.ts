@@ -39,7 +39,7 @@ const monsters = {
     hp: 20,
     minDamage: 0,
     maxDamage: 8,
-    experience: 5,
+    experience: 50,
     loot: {
       gold: { id: 0, min: 0, max: 4 },
       items: [
