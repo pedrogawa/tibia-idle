@@ -1,7 +1,9 @@
 interface Item {
-  id: number;
+  id: string;
   name: string;
   probability: number;
+  type: string;
+  src: string;
 }
 
 export type DropItem = Omit<Item, "probability"> & {
@@ -9,7 +11,7 @@ export type DropItem = Omit<Item, "probability"> & {
 };
 
 interface Loot {
-  gold: { id: number; min: number; max: number };
+  gold: { id: string; min: number; max: number; src: string };
   items: Item[];
 }
 
@@ -41,12 +43,14 @@ const monsters = {
     maxDamage: 8,
     experience: 50,
     loot: {
-      gold: { id: 0, min: 0, max: 4 },
+      gold: { id: "0", min: 0, max: 4, src: "src/assets/Gold_Coin.gif" },
       items: [
         {
-          id: 1,
+          id: "1",
           name: "Cheese",
           probability: 80,
+          type: "food",
+          src: "src/assets/Cheese.gif",
         },
       ],
     },
@@ -59,12 +63,14 @@ const monsters = {
     maxDamage: 10,
     experience: 10,
     loot: {
-      gold: { id: 0, min: 0, max: 2 },
+      gold: { id: "0", min: 0, max: 2, src: "src/assets/Gold_Coin.gif" },
       items: [
         {
-          id: 1,
+          id: "1",
           name: "Cheese",
           probability: 25,
+          type: "food",
+          src: "src/assets/Cheese.gif",
         },
       ],
     },
@@ -117,13 +123,17 @@ export function generateLoot(loot: Loot): { items: DropItem[] } {
         id: item.id,
         name: item.name,
         qty: 1,
+        src: item.src,
+        type: "food",
       };
     });
 
   droppedItems.push({
-    id: 0,
+    id: "0",
     name: "gold",
     qty: gold,
+    src: "src/assets/Gold_Coin.gif",
+    type: "gold",
   });
 
   return { items: droppedItems };

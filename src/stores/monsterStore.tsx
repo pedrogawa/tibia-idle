@@ -17,15 +17,18 @@ export const monsterStore = create<MonsterState>((set) => ({
     maxDamage: 0,
     loot: {
       gold: {
-        id: 0,
+        id: "1",
         min: 0,
         max: 0,
+        src: "",
       },
       items: [
         {
-          id: 0,
+          id: "2",
           name: "",
           probability: 0,
+          src: "",
+          type: "",
         },
       ],
     },

@@ -6,13 +6,10 @@ import { MonsterStatus } from "./component/MonsterStatus";
 import { playerStore } from "./stores/playerStore";
 import PlayerEquipment from "./component/PlayerEquipment";
 import { calculateLevelExp } from "./utils/calculateLevelExp";
-import {
-  DropItem,
-  generateLoot,
-  places,
-  selectMonster,
-} from "./utils/monsters";
+import { generateLoot, places, selectMonster } from "./utils/monsters";
 import { PlayerStatus } from "./component/PlayerStatus";
+import { LootDrop } from "./component/LootDrop";
+import { lootStore } from "./stores/lootStore";
 
 function App() {
   const { monsterHP, setMonsterHP, monster, setMonster } = monsterStore(
@@ -33,8 +30,12 @@ function App() {
     })
   );
 
+  const { addDroppedLoot } = lootStore((state) => ({
+    droppedLoot: state.droppedLoot,
+    addDroppedLoot: state.addDroppedLoot,
+  }));
+
   const [monstersKilled, setMonstersKilled] = useState(0);
-  const [loot, setLoot] = useState<DropItem[]>([]);
 
   function startHunt() {
     const selectedMonster = selectMonster(places[0]);
@@ -44,30 +45,9 @@ function App() {
     setMonsterHP(selectedMonster.hp);
   }
 
-  function aggregateLoot(
-    droppedItems: DropItem[],
-    currentLoot: Map<string, DropItem>
-  ) {
-    const updatedLoot = new Map(currentLoot);
-
-    for (const item of droppedItems) {
-      const existingItem = updatedLoot.get(item.name);
-      if (existingItem) {
-        updatedLoot.set(item.name, {
-          ...item,
-          qty: existingItem.qty + item.qty,
-        });
-      } else {
-        updatedLoot.set(item.name, item);
-      }
-    }
-
-    return updatedLoot;
-  }
-
   function attack(damage: number) {
     const nextMonsterHp = monsterHP - damage;
-    if (monster) {
+    if (!!monster.name) {
       if (nextMonsterHp <= 0) {
         setMonsterHP(monster.hp);
         setMonstersKilled((prevCount) => prevCount + 1);
@@ -79,12 +59,8 @@ function App() {
           levelUp(nextNextLevel);
         }
         const selectedMonster = selectMonster(places[0]);
-        const currentLoot = new Map<string, DropItem>();
         const lootDropped = generateLoot(monster.loot);
-        const updatedLoot = aggregateLoot(lootDropped.items, currentLoot);
-        const nextLootArray = Array.from(updatedLoot.values());
-        setLoot(nextLootArray);
-        console.log(loot);
+        addDroppedLoot(lootDropped.items);
         setMonster(selectedMonster);
         setMonsterHP(selectedMonster.hp);
       } else {
@@ -95,7 +71,14 @@ function App() {
           monster.minDamage
       );
       const nextPlayerHP = player.currentHP - monsterDamage;
+      const potionHP = Math.floor((player.hp * 35) / 100);
+
       takeDamage(nextPlayerHP);
+
+      if (player.currentHP <= potionHP) {
+        const healedHP = player.currentHP + 45;
+        takeDamage(healedHP);
+      }
     } else {
       window.alert("Needs to select a monster!");
     }
@@ -157,12 +140,13 @@ function App() {
       <button onClick={() => attack(5)}>Attack!</button>
 
       <section className="flex gap-16 items-center justify-between">
-        <section className="flex items-start justify-start flex-co gap-8 flex-col">
+        <section className="flex items-start justify-start gap-8 flex-col">
           <PlayerStatus />
           <PlayerEquipment />
         </section>
-        <section>
+        <section className="flex items-start justify-start flex-col gap-8">
           <MonsterStatus />
+          <LootDrop />
         </section>
       </section>
     </main>

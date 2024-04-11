@@ -1,4 +1,5 @@
 import create from "zustand";
+import { DropItem } from "../utils/monsters";
 
 interface Player {
   hp: number;
@@ -6,6 +7,7 @@ interface Player {
   level: number;
   experience: number;
   currentExperience: number;
+  backpack: DropItem[];
 }
 
 interface PlayerState {
@@ -13,6 +15,7 @@ interface PlayerState {
   levelUp: (newLevelExperience: number) => void;
   gainExperience: (newExperience: number) => void;
   takeDamage: (newHP: number) => void;
+  lootItems: (items: DropItem[]) => void;
 }
 
 export const playerStore = create<PlayerState>((set) => ({
@@ -22,6 +25,7 @@ export const playerStore = create<PlayerState>((set) => ({
     level: 1,
     experience: 100,
     currentExperience: 0,
+    backpack: [],
   },
   levelUp: (newLevelExperience: number) =>
     set((state) => ({
@@ -47,4 +51,23 @@ export const playerStore = create<PlayerState>((set) => ({
         currentHP: newHP,
       },
     })),
+  lootItems: (items) =>
+    set((state) => {
+      const newLoot = [...state.player.backpack];
+      items.forEach((item) => {
+        const existingItemIndex = newLoot.findIndex((i) => i.id === item.id);
+        console.log(item, existingItemIndex);
+        if (existingItemIndex !== -1) {
+          newLoot[existingItemIndex].qty += item.qty;
+        } else {
+          newLoot.push(item);
+        }
+      });
+      return {
+        player: {
+          ...state.player,
+          backpack: newLoot,
+        },
+      };
+    }),
 }));
