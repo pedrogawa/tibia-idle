@@ -10,6 +10,7 @@ import { generateLoot, places, selectMonster } from "./utils/monsters";
 import { PlayerStatus } from "./component/PlayerStatus";
 import { LootDrop } from "./component/LootDrop";
 import { lootStore } from "./stores/lootStore";
+import { Backpack } from "./component/Backpack";
 
 function App() {
   const { monsterHP, setMonsterHP, monster, setMonster } = monsterStore(
@@ -143,6 +144,7 @@ function App() {
         <section className="flex items-start justify-start gap-8 flex-col">
           <PlayerStatus />
           <PlayerEquipment />
+          <Backpack />
         </section>
         <section className="flex items-start justify-start flex-col gap-8">
           <MonsterStatus />

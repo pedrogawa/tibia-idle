@@ -28,16 +28,7 @@ export function LootDrop() {
         <div className="flex items-center justify-center gap-4">
           {droppedLoot.map((loot) => {
             return (
-              <div
-                className="flex items-center justify-center gap-2"
-                onClick={() => {
-                  if (loot.type === "food") {
-                    const healedHP = player.currentHP + 27;
-
-                    takeDamage(healedHP);
-                  }
-                }}
-              >
+              <div className="flex items-center justify-center gap-2">
                 <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md">
                   <img src={loot.src} alt="" />
                 </div>

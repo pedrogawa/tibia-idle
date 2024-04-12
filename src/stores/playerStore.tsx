@@ -16,6 +16,7 @@ interface PlayerState {
   gainExperience: (newExperience: number) => void;
   takeDamage: (newHP: number) => void;
   lootItems: (items: DropItem[]) => void;
+  removeItem: (id: string) => void;
 }
 
 export const playerStore = create<PlayerState>((set) => ({
@@ -67,6 +68,27 @@ export const playerStore = create<PlayerState>((set) => ({
         player: {
           ...state.player,
           backpack: newLoot,
+        },
+      };
+    }),
+  removeItem: (id) =>
+    set((state) => {
+      const index = state.player.backpack.findIndex((item) => item.id === id);
+
+      state.player.backpack[index] = {
+        ...state.player.backpack[index],
+        qty: state.player.backpack[index].qty - 1,
+      };
+
+      if (state.player.backpack[index].qty <= 0) {
+        state.player.backpack = state.player.backpack.filter(
+          (item) => item.id !== id
+        );
+      }
+
+      return {
+        player: {
+          ...state.player,
         },
       };
     }),
