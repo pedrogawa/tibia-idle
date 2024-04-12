@@ -13,14 +13,16 @@ import { lootStore } from "./stores/lootStore";
 import { Backpack } from "./component/Backpack";
 
 function App() {
-  const { monsterHP, setMonsterHP, monster, setMonster } = monsterStore(
-    (state) => ({
+  const [damageDone, setDamageDone] = useState(false);
+
+  const { monsterHP, setMonsterHP, monster, setMonster, setDamageTaken } =
+    monsterStore((state) => ({
       monsterHP: state.monsterHP,
       setMonsterHP: state.setMonsterHP,
       monster: state.monster,
       setMonster: state.setMonster,
-    })
-  );
+      setDamageTaken: state.setDamageTaken,
+    }));
 
   const { player, levelUp, gainExperience, takeDamage } = playerStore(
     (state) => ({
@@ -46,8 +48,10 @@ function App() {
     setMonsterHP(selectedMonster.hp);
   }
 
-  function attack(damage: number) {
-    const nextMonsterHp = monsterHP - damage;
+  function attack() {
+    const playerDamage = Math.floor(Math.random() * (10 - 0) + 0);
+    const nextMonsterHp = monsterHP - playerDamage;
+    setDamageTaken(playerDamage);
     if (!!monster.name) {
       if (nextMonsterHp <= 0) {
         setMonsterHP(monster.hp);
@@ -75,6 +79,11 @@ function App() {
       const potionHP = Math.floor((player.hp * 35) / 100);
 
       takeDamage(nextPlayerHP);
+
+      setDamageDone(true);
+      setTimeout(() => {
+        setDamageDone(false);
+      }, 500);
 
       if (player.currentHP <= potionHP) {
         const healedHP = player.currentHP + 45;
@@ -138,7 +147,7 @@ function App() {
         {player.currentExperience} / {player.experience}
       </p>
       <button onClick={startHunt}>Start Hunt!</button>
-      <button onClick={() => attack(5)}>Attack!</button>
+      <button onClick={attack}>Attack!</button>
 
       <section className="flex gap-16 items-center justify-between">
         <section className="flex items-start justify-start gap-8 flex-col">
@@ -147,7 +156,7 @@ function App() {
           <Backpack />
         </section>
         <section className="flex items-start justify-start flex-col gap-8">
-          <MonsterStatus />
+          <MonsterStatus damageDone={damageDone} />
           <LootDrop />
         </section>
       </section>

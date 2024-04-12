@@ -6,10 +6,13 @@ interface MonsterState {
   setMonsterHP: (newHP: number) => void;
   setMonster: (newMonster: Monster) => void;
   monster: Monster;
+  damageTaken: number;
+  setDamageTaken: (newDamageTaken: number) => void;
 }
 
 export const monsterStore = create<MonsterState>((set) => ({
   monsterHP: 0,
+  damageTaken: 0,
   monster: {
     name: "",
     hp: 0,
@@ -37,4 +40,6 @@ export const monsterStore = create<MonsterState>((set) => ({
   },
   setMonsterHP: (newHP: number) => set({ monsterHP: newHP }),
   setMonster: (newMonster: Monster) => set({ monster: newMonster }),
+  setDamageTaken: (newDamageTaken: number) =>
+    set({ damageTaken: newDamageTaken }),
 }));
