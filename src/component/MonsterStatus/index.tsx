@@ -34,7 +34,6 @@ export function MonsterStatus({ damageDone }: MonsterStatusProps) {
         <div className="flex flex-col items-center justify-center gap-4">
           <h2 className="font-bold">No monster selected</h2>
           <p>HP: -</p>
-          {/* <img src={monster.src} alt="" /> */}
         </div>
       </section>
     );

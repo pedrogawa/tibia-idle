@@ -50,7 +50,7 @@ function App() {
   }
 
   function attack() {
-    const playerDamage = Math.floor(Math.random() * (10 - 0) + 0);
+    const playerDamage = Math.floor(Math.random() * (50 - 0) + 0);
     const nextMonsterHp = monsterHP - playerDamage;
     setDamageTaken(playerDamage);
     if (!!monster.name) {
@@ -141,7 +141,7 @@ function App() {
           </tbody>
         </table>
       </section>
-      <section>
+      <section className="flex flex-col gap-4">
         {places.map((hunt) => {
           return (
             <div
@@ -153,7 +153,9 @@ function App() {
               }}
               key={hunt.id}
             >
-              <button>{hunt.name}</button>
+              <button className="flex items-center justify-center w-48">
+                {hunt.name}
+              </button>
             </div>
           );
         })}

@@ -44,6 +44,14 @@ export function isArmorItem(item: any): item is ArmorItem {
   );
 }
 
+export function isFoodItem(item: any): item is FoodItem {
+  return (
+    item.type === "food" &&
+    item.status !== undefined &&
+    typeof item.status.regeneration === "number"
+  );
+}
+
 interface GoldItem extends BaseItem {
   type: "gold";
 }
@@ -89,6 +97,12 @@ const helmetType: "food" | "helmet" | "armor" | "legs" | "shield" | "weapon" =
 const weaponType: "food" | "helmet" | "armor" | "legs" | "shield" | "weapon" =
   "weapon";
 
+const shieldType: "food" | "helmet" | "armor" | "legs" | "shield" | "weapon" =
+  "shield";
+
+const armorType: "food" | "helmet" | "armor" | "legs" | "shield" | "weapon" =
+  "armor";
+
 function goldObjectGenerator(min: number, max: number) {
   return {
     id: "0",
@@ -115,7 +129,7 @@ const monsters = {
           type: foodType,
           src: "src/assets/Cheese.gif",
           status: {
-            regeneration: 108,
+            regeneration: 27,
           },
         },
       ],
@@ -138,12 +152,15 @@ const monsters = {
           type: foodType,
           src: "src/assets/Cheese.gif",
           status: {
-            regeneration: 108,
+            regeneration: 27,
           },
         },
       ],
     },
     src: "src/assets/Cave_Rat.gif",
+  },
+  spider: {
+    name: "Young Troll",
   },
   troll: {
     name: "Troll",
@@ -162,7 +179,7 @@ const monsters = {
           type: foodType,
           src: "src/assets/Meat.gif",
           status: {
-            regeneration: 180,
+            regeneration: 45,
           },
         },
         {
@@ -184,6 +201,80 @@ const monsters = {
           src: "src/assets/Leather_Helmet.gif",
           status: {
             armor: 1,
+          },
+        },
+        {
+          id: "5",
+          name: "Wooden Shield",
+          probability: 100,
+          type: shieldType,
+          src: "src/assets/Wooden_Shield.gif",
+          status: {
+            armor: 1,
+          },
+        },
+        {
+          id: "6",
+          name: "Leather Armor",
+          probability: 100,
+          type: armorType,
+          src: "src/assets/Leather_Armor.gif",
+          status: {
+            armor: 6,
+          },
+        },
+      ],
+    },
+  },
+  minotaur: {
+    name: "Minotaur",
+    hp: 100,
+    minDamage: 0,
+    maxDamage: 20,
+    experience: 50,
+    src: "src/assets/Minotaur.gif",
+    loot: {
+      gold: goldObjectGenerator(0, 20),
+      items: [
+        {
+          id: "7",
+          name: "Brass Helmet",
+          probability: 100,
+          type: helmetType,
+          src: "src/assets/Brass_Helmet.gif",
+          status: {
+            armor: 3,
+          },
+        },
+        {
+          id: "8",
+          name: "Chain Armor",
+          probability: 100,
+          type: armorType,
+          src: "src/assets/Chain_Armor.gif",
+          status: {
+            armor: 6,
+          },
+        },
+        {
+          id: "9",
+          name: "Plate Shield",
+          probability: 100,
+          type: shieldType,
+          src: "src/assets/Plate_Shield.gif",
+          status: {
+            armor: 17,
+          },
+        },
+        {
+          id: "10",
+          name: "Mace",
+          probability: 100,
+          type: weaponType,
+          src: "src/assets/Mace.gif",
+          status: {
+            attack: 16,
+            defense: 11,
           },
         },
       ],
@@ -217,6 +308,16 @@ export const places: Hunt[] = [
       {
         monster: monsters.rat,
         probability: 5,
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Minotaur Hell",
+    monsters: [
+      {
+        monster: monsters.minotaur,
+        probability: 100,
       },
     ],
   },

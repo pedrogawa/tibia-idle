@@ -20,7 +20,6 @@ export const lootStore = create<LootState>((set) => ({
           newLoot.push(item);
         }
       });
-      console.log(newLoot);
 
       return { droppedLoot: newLoot };
     }),
