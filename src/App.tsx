@@ -14,6 +14,7 @@ import { Backpack } from "./component/Backpack";
 
 function App() {
   const [damageDone, setDamageDone] = useState(false);
+  const [placeId, setPlaceId] = useState(0);
 
   const { monsterHP, setMonsterHP, monster, setMonster, setDamageTaken } =
     monsterStore((state) => ({
@@ -40,8 +41,8 @@ function App() {
 
   const [monstersKilled, setMonstersKilled] = useState(0);
 
-  function startHunt() {
-    const selectedMonster = selectMonster(places[0]);
+  function startHunt(id: number) {
+    const selectedMonster = selectMonster(places[id]);
 
     setMonster(selectedMonster);
 
@@ -63,7 +64,7 @@ function App() {
         if (nextCurrExp >= nextLevelExp) {
           levelUp(nextNextLevel);
         }
-        const selectedMonster = selectMonster(places[0]);
+        const selectedMonster = selectMonster(places[placeId]);
         const lootDropped = generateLoot(monster.loot);
         addDroppedLoot(lootDropped.items);
         setMonster(selectedMonster);
@@ -140,13 +141,30 @@ function App() {
           </tbody>
         </table>
       </section>
+      <section>
+        {places.map((hunt) => {
+          return (
+            <div
+              onClick={() => {
+                const newHunt = hunt.id;
+
+                setPlaceId(newHunt);
+                startHunt(placeId);
+              }}
+              key={hunt.id}
+            >
+              <button>{hunt.name}</button>
+            </div>
+          );
+        })}
+      </section>
       <h2>Combat Simulator</h2>
       <p>Monsters Killed: {monstersKilled}</p>
       <p>Level: {player.level}</p>
       <p>
         {player.currentExperience} / {player.experience}
       </p>
-      <button onClick={startHunt}>Start Hunt!</button>
+      <button onClick={() => startHunt(placeId)}>Start Hunt!</button>
       <button onClick={attack}>Attack!</button>
 
       <section className="flex gap-16 items-center justify-between">

@@ -13,7 +13,7 @@ export function MonsterStatus({ damageDone }: MonsterStatusProps) {
   useEffect(() => {
     if (damageDone) {
       setDamageTakenClass(
-        "flex items-center justify-center bg-red-500 p-1 rounded-full right-0 top-0 absolute h-6 w-6 opacity-1 ease-in duration-500"
+        "flex items-center justify-center bg-red-500 p-1 rounded-full right-0 top-0 absolute h-6 w-6 opacity-1 ease-in duration-200"
       );
     } else {
       setDamageTakenClass(

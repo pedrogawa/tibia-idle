@@ -1,5 +1,6 @@
 import { lootStore } from "../../stores/lootStore";
 import { playerStore } from "../../stores/playerStore";
+import { DropItem, isArmorItem, isWeaponItem } from "../../utils/monsters";
 
 export function LootDrop() {
   const { droppedLoot, clearDroppedLoot } = lootStore((state) => ({
@@ -26,14 +27,23 @@ export function LootDrop() {
           <button onClick={handleLootAll}>Loot all</button>
         </div>
         <div className="flex items-center justify-center gap-4">
-          {droppedLoot.map((loot) => {
+          {droppedLoot.map((loot: DropItem) => {
             return (
-              <div className="flex items-center justify-center gap-2">
+              <div
+                className="flex items-center justify-center gap-2"
+                key={loot.id}
+              >
                 <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md">
                   <img src={loot.src} alt="" />
                 </div>
                 <span>
-                  {loot.qty}x {loot.name}
+                  {isWeaponItem(loot) && (
+                    <span>
+                      {loot.status.attack} / {loot.status.defense}
+                    </span>
+                  )}
+
+                  {isArmorItem(loot) && <span>{loot.status.armor}</span>}
                 </span>
               </div>
             );

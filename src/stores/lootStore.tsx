@@ -14,13 +14,14 @@ export const lootStore = create<LootState>((set) => ({
       const newLoot = [...state.droppedLoot];
       items.forEach((item) => {
         const existingItemIndex = newLoot.findIndex((i) => i.id === item.id);
-        console.log(item, existingItemIndex);
         if (existingItemIndex !== -1) {
           newLoot[existingItemIndex].qty += item.qty;
         } else {
           newLoot.push(item);
         }
       });
+      console.log(newLoot);
+
       return { droppedLoot: newLoot };
     }),
   clearDroppedLoot: () =>

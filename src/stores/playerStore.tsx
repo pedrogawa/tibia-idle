@@ -57,7 +57,6 @@ export const playerStore = create<PlayerState>((set) => ({
       const newLoot = [...state.player.backpack];
       items.forEach((item) => {
         const existingItemIndex = newLoot.findIndex((i) => i.id === item.id);
-        console.log(item, existingItemIndex);
         if (existingItemIndex !== -1) {
           newLoot[existingItemIndex].qty += item.qty;
         } else {
