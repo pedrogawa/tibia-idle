@@ -1,5 +1,6 @@
 import create from "zustand";
-import { DropItem } from "../utils/monsters";
+import { Item, DropItem } from "../utils/monsters";
+import { items } from "../utils/items";
 
 interface Player {
   hp: number;
@@ -8,6 +9,7 @@ interface Player {
   experience: number;
   currentExperience: number;
   backpack: DropItem[];
+  equipment: Record<string, any>;
 }
 
 interface PlayerState {
@@ -17,7 +19,12 @@ interface PlayerState {
   takeDamage: (newHP: number) => void;
   lootItems: (items: DropItem[]) => void;
   removeItem: (id: string) => void;
+  equipItem: (item: ItemWithStatus) => void;
 }
+
+type ItemWithStatus = Item & {
+  status: any;
+};
 
 export const playerStore = create<PlayerState>((set) => ({
   player: {
@@ -27,6 +34,20 @@ export const playerStore = create<PlayerState>((set) => ({
     experience: 100,
     currentExperience: 0,
     backpack: [],
+    equipment: {
+      helmet: {
+        id: 0,
+        name: "",
+        src: "",
+        status: {},
+      },
+      armor: {
+        id: items.jacket.id,
+        name: items.jacket.name,
+        src: items.jacket.src,
+        status: items.jacket.status,
+      },
+    },
   },
   levelUp: (newLevelExperience: number) =>
     set((state) => ({
@@ -84,11 +105,50 @@ export const playerStore = create<PlayerState>((set) => ({
           (item) => item.id !== id
         );
       }
-
       return {
         player: {
           ...state.player,
         },
       };
     }),
+  equipItem: (item: ItemWithStatus) => {
+    set((state) => {
+      const aux = state.player.equipment[`${item.type}`];
+      const auxIndex = state.player.backpack.findIndex((i) => i.id === aux.id);
+
+      if (auxIndex !== -1) {
+        state.player.backpack[auxIndex].qty += 1;
+      } else {
+        state.player.backpack.push(aux);
+      }
+
+      const index = state.player.backpack.findIndex((i) => i.id === item.id);
+
+      state.player.backpack[index] = {
+        ...state.player.backpack[index],
+        qty: state.player.backpack[index].qty - 1,
+      };
+
+      if (state.player.backpack[index].qty <= 0) {
+        state.player.backpack = state.player.backpack.filter(
+          (i) => i.id !== item.id
+        );
+      }
+
+      return {
+        player: {
+          ...state.player,
+          equipment: {
+            ...state.player.equipment,
+            [`${item.type}`]: {
+              id: item.id,
+              name: item.name,
+              src: item.src,
+              status: item.status,
+            },
+          },
+        },
+      };
+    });
+  },
 }));

@@ -1,11 +1,15 @@
 import { playerStore } from "../../stores/playerStore";
+import { isArmorItem } from "../../utils/monsters";
 
 export function Backpack() {
-  const { player, takeDamage, removeItem } = playerStore((state) => ({
-    player: state.player,
-    takeDamage: state.takeDamage,
-    removeItem: state.removeItem,
-  }));
+  const { player, takeDamage, removeItem, equipItem } = playerStore(
+    (state) => ({
+      player: state.player,
+      takeDamage: state.takeDamage,
+      removeItem: state.removeItem,
+      equipItem: state.equipItem,
+    })
+  );
 
   return (
     <div className="flex items-start justify-start bg-[#363636] p-8 rounded-md gap-8 flex-col w-[370px] h-[270px]">
@@ -15,12 +19,22 @@ export function Backpack() {
           return (
             <div
               className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md relative"
+              key={crypto.randomUUID()}
               onClick={() => {
                 if (item.type === "food") {
                   const healedHP = player.currentHP + 27;
 
                   takeDamage(healedHP);
                   removeItem(item.id);
+                }
+
+                if (item.type === "armor" && isArmorItem(item)) {
+                  const newItem = {
+                    ...item,
+                    status: item.status,
+                  };
+
+                  equipItem(newItem);
                 }
               }}
             >

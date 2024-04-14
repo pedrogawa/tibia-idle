@@ -26,7 +26,7 @@ export function LootDrop() {
           <h3>Dropped Loot</h3>
           <button onClick={handleLootAll}>Loot all</button>
         </div>
-        <div className="grid items-center justify-center gap-3 grid-cols-5 gap-y-8 overflow-auto">
+        <div className="grid items-center justify-center gap-3 grid-cols-5 gap-y-8 h-32 overflow-auto">
           {droppedLoot.map((loot) => {
             return (
               <div

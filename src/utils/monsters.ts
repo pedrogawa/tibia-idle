@@ -1,3 +1,5 @@
+import { items } from "./items";
+
 interface BaseItem {
   id: string;
   name: string;
@@ -56,7 +58,7 @@ interface GoldItem extends BaseItem {
   type: "gold";
 }
 
-type Item = FoodItem | GoldItem | WeaponItem | ArmorItem;
+export type Item = FoodItem | GoldItem | WeaponItem | ArmorItem;
 
 export type DropItem = Omit<Item, "probability"> & {
   qty: number;
@@ -88,21 +90,6 @@ interface Hunt {
   monsters: MonstersProbability[];
 }
 
-const foodType: "food" | "helmet" | "armor" | "legs" | "shield" | "weapon" =
-  "food";
-
-const helmetType: "food" | "helmet" | "armor" | "legs" | "shield" | "weapon" =
-  "helmet";
-
-const weaponType: "food" | "helmet" | "armor" | "legs" | "shield" | "weapon" =
-  "weapon";
-
-const shieldType: "food" | "helmet" | "armor" | "legs" | "shield" | "weapon" =
-  "shield";
-
-const armorType: "food" | "helmet" | "armor" | "legs" | "shield" | "weapon" =
-  "armor";
-
 function goldObjectGenerator(min: number, max: number) {
   return {
     id: "0",
@@ -123,14 +110,8 @@ const monsters = {
       gold: goldObjectGenerator(0, 4),
       items: [
         {
-          id: "1",
-          name: "Cheese",
+          ...items.cheese,
           probability: 35,
-          type: foodType,
-          src: "src/assets/Cheese.gif",
-          status: {
-            regeneration: 27,
-          },
         },
       ],
     },
@@ -146,14 +127,8 @@ const monsters = {
       gold: goldObjectGenerator(0, 2),
       items: [
         {
-          id: "1",
-          name: "Cheese",
-          probability: 100,
-          type: foodType,
-          src: "src/assets/Cheese.gif",
-          status: {
-            regeneration: 27,
-          },
+          ...items.cheese,
+          probability: 35,
         },
       ],
     },
@@ -173,55 +148,24 @@ const monsters = {
       gold: goldObjectGenerator(0, 12),
       items: [
         {
-          id: "2",
-          name: "Meat",
+          ...items.meat,
           probability: 100,
-          type: foodType,
-          src: "src/assets/Meat.gif",
-          status: {
-            regeneration: 45,
-          },
         },
         {
-          id: "3",
-          name: "Hand Axe",
+          ...items.handAxe,
           probability: 100,
-          type: weaponType,
-          src: "src/assets/Hand_Axe.gif",
-          status: {
-            attack: 15,
-            defense: 10,
-          },
         },
         {
-          id: "4",
-          name: "Leather Helmet",
+          ...items.leatherHelmet,
           probability: 100,
-          type: helmetType,
-          src: "src/assets/Leather_Helmet.gif",
-          status: {
-            armor: 1,
-          },
         },
         {
-          id: "5",
-          name: "Wooden Shield",
+          ...items.woodenShield,
           probability: 100,
-          type: shieldType,
-          src: "src/assets/Wooden_Shield.gif",
-          status: {
-            armor: 1,
-          },
         },
         {
-          id: "6",
-          name: "Leather Armor",
+          ...items.leatherArmor,
           probability: 100,
-          type: armorType,
-          src: "src/assets/Leather_Armor.gif",
-          status: {
-            armor: 6,
-          },
         },
       ],
     },
@@ -237,45 +181,20 @@ const monsters = {
       gold: goldObjectGenerator(0, 20),
       items: [
         {
-          id: "7",
-          name: "Brass Helmet",
+          ...items.brassHelmet,
           probability: 100,
-          type: helmetType,
-          src: "src/assets/Brass_Helmet.gif",
-          status: {
-            armor: 3,
-          },
         },
         {
-          id: "8",
-          name: "Chain Armor",
+          ...items.chainArmor,
           probability: 100,
-          type: armorType,
-          src: "src/assets/Chain_Armor.gif",
-          status: {
-            armor: 6,
-          },
         },
         {
-          id: "9",
-          name: "Plate Shield",
+          ...items.plateShield,
           probability: 100,
-          type: shieldType,
-          src: "src/assets/Plate_Shield.gif",
-          status: {
-            armor: 17,
-          },
         },
         {
-          id: "10",
-          name: "Mace",
+          ...items.mace,
           probability: 100,
-          type: weaponType,
-          src: "src/assets/Mace.gif",
-          status: {
-            attack: 16,
-            defense: 11,
-          },
         },
       ],
     },
