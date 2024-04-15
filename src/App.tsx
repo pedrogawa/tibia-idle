@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { monsterStore } from "./stores/monsterStore";
 
 import "./App.css";
@@ -15,6 +15,7 @@ import { Backpack } from "./component/Backpack";
 function App() {
   const [damageDone, setDamageDone] = useState(false);
   const [placeId, setPlaceId] = useState(0);
+  const [timeoutId, setTimeoutId] = useState<number>(0);
 
   const { monsterHP, setMonsterHP, monster, setMonster, setDamageTaken } =
     monsterStore((state) => ({
@@ -50,7 +51,12 @@ function App() {
   }
 
   function attack() {
-    const playerDamage = Math.floor(Math.random() * (50 - 0) + 0);
+    const weaponDamage = Math.floor(player.equipment.weapon.status.attack / 3);
+    const levelDamage = Math.floor(player.level / 5);
+    const playerDamage = Math.floor(
+      Math.random() * (levelDamage + weaponDamage + player.skills.attack - 0) +
+        0
+    );
     const nextMonsterHp = monsterHP - playerDamage;
     setDamageTaken(playerDamage);
     if (!!monster.name) {

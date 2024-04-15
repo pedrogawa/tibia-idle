@@ -1,5 +1,5 @@
 import { playerStore } from "../../stores/playerStore";
-import { isArmorItem } from "../../utils/monsters";
+import { isArmorItem, isWeaponItem } from "../../utils/monsters";
 
 export function Backpack() {
   const { player, takeDamage, removeItem, equipItem } = playerStore(
@@ -29,6 +29,15 @@ export function Backpack() {
                 }
 
                 if (item.type === "armor" && isArmorItem(item)) {
+                  const newItem = {
+                    ...item,
+                    status: item.status,
+                  };
+
+                  equipItem(newItem);
+                }
+
+                if (item.type === "weapon" && isWeaponItem(item)) {
                   const newItem = {
                     ...item,
                     status: item.status,

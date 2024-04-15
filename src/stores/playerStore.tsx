@@ -10,6 +10,10 @@ interface Player {
   currentExperience: number;
   backpack: DropItem[];
   equipment: Record<string, any>;
+  skills: {
+    attack: number;
+    defense: number;
+  };
 }
 
 interface PlayerState {
@@ -45,8 +49,20 @@ export const playerStore = create<PlayerState>((set) => ({
         id: items.jacket.id,
         name: items.jacket.name,
         src: items.jacket.src,
+        type: items.jacket.type,
         status: items.jacket.status,
       },
+      weapon: {
+        id: items.club.id,
+        name: items.club.name,
+        src: items.club.src,
+        type: items.club.type,
+        status: items.club.status,
+      },
+    },
+    skills: {
+      attack: 10,
+      defense: 10,
     },
   },
   levelUp: (newLevelExperience: number) =>
@@ -119,7 +135,11 @@ export const playerStore = create<PlayerState>((set) => ({
       if (auxIndex !== -1) {
         state.player.backpack[auxIndex].qty += 1;
       } else {
-        state.player.backpack.push(aux);
+        state.player.backpack.push({
+          ...aux,
+          qty: 1,
+          type: item.type,
+        });
       }
 
       const index = state.player.backpack.findIndex((i) => i.id === item.id);
