@@ -5,19 +5,14 @@ export function PlayerStatus() {
     player: state.player,
   }));
 
+  console.log((100 * player.currentExperience) / player.experience);
+
   return (
-    <div className="w-full">
-      <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
-        <div
-          className="bg-red-800 h-3 rounded-full dark:bg-red-800"
-          style={{
-            width: `${Math.floor((player.currentHP * 100) / player.hp)}%`,
-          }}
-        ></div>
+    <section className="h-full bg-[#363636] w-48">
+      <span className="">Class</span>
+      <div className="">
+        <span>{(100 * player.currentExperience) / player.experience}</span>
       </div>
-      <p>
-        Player HP: {player.currentHP} / {player.hp}
-      </p>
-    </div>
+    </section>
   );
 }

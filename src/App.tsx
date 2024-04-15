@@ -7,10 +7,11 @@ import { playerStore } from "./stores/playerStore";
 import PlayerEquipment from "./component/PlayerEquipment";
 import { calculateLevelExp } from "./utils/calculateLevelExp";
 import { generateLoot, places, selectMonster } from "./utils/monsters";
-import { PlayerStatus } from "./component/PlayerStatus";
 import { LootDrop } from "./component/LootDrop";
 import { lootStore } from "./stores/lootStore";
 import { Backpack } from "./component/Backpack";
+import { PlayerHitPoints } from "./component/PlayerHitPoints";
+import { PlayerStatus } from "./component/PlayerStatus";
 
 function App() {
   const [damageDone, setDamageDone] = useState(false);
@@ -176,11 +177,15 @@ function App() {
       <button onClick={attack}>Attack!</button>
 
       <section className="flex gap-16 items-center justify-between">
-        <section className="flex items-start justify-start gap-8 flex-col">
+        <section className="flex items-start justify-start gap-16">
+          <section className="flex items-start justify-start gap-8 flex-col">
+            <PlayerHitPoints />
+            <PlayerEquipment />
+            <Backpack />
+          </section>
           <PlayerStatus />
-          <PlayerEquipment />
-          <Backpack />
         </section>
+
         <section className="flex items-start justify-start flex-col gap-8">
           <MonsterStatus damageDone={damageDone} />
           <LootDrop />
