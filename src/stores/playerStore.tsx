@@ -1,26 +1,7 @@
 import create from "zustand";
+import { calculateDamage } from "../utils/calculateDamage";
 import { Item, DropItem } from "../utils/monsters";
-import { items } from "../utils/items";
-
-interface Player {
-  hp: number;
-  currentHP: number;
-  level: number;
-  experience: number;
-  currentExperience: number;
-  backpack: DropItem[];
-  equipment: Record<string, any>;
-  skills: {
-    attack: {
-      level: number;
-      percentage: number;
-    };
-    defense: {
-      level: number;
-      percentage: number;
-    };
-  };
-}
+import { player, Player } from "../utils/player";
 
 interface PlayerState {
   player: Player;
@@ -39,44 +20,8 @@ type ItemWithStatus = Item & {
 
 export const playerStore = create<PlayerState>((set) => ({
   player: {
-    currentHP: 150,
-    hp: 150,
-    level: 1,
-    experience: 100,
-    currentExperience: 0,
-    backpack: [],
-    equipment: {
-      helmet: {
-        id: 0,
-        name: "",
-        src: "",
-        status: {},
-      },
-      armor: {
-        id: items.jacket.id,
-        name: items.jacket.name,
-        src: items.jacket.src,
-        type: items.jacket.type,
-        status: items.jacket.status,
-      },
-      weapon: {
-        id: items.club.id,
-        name: items.club.name,
-        src: items.club.src,
-        type: items.club.type,
-        status: items.club.status,
-      },
-    },
-    skills: {
-      attack: {
-        level: 10,
-        percentage: 0,
-      },
-      defense: {
-        level: 10,
-        percentage: 0,
-      },
-    },
+    ...player,
+    damage: calculateDamage(player),
   },
   levelUp: (newLevelExperience: number) =>
     set((state) => ({
@@ -180,15 +125,15 @@ export const playerStore = create<PlayerState>((set) => ({
               status: item.status,
             },
           },
+          damage: calculateDamage(state.player),
         },
       };
     });
   },
   skillsTraining: () => {
     set((state) => {
-      console.log(state.player);
       const newStatus = state.player.skills;
-      newStatus.attack.percentage += 0.3;
+      newStatus.attack.percentage += 25;
       newStatus.defense.percentage += 0.15;
 
       if (newStatus.attack.percentage >= 100) {
@@ -201,10 +146,12 @@ export const playerStore = create<PlayerState>((set) => ({
         newStatus.defense.percentage = 0;
       }
 
+      const newPlayer = { ...state.player, skills: newStatus };
+
       return {
         player: {
-          ...state.player,
-          skills: newStatus,
+          ...newPlayer,
+          damage: calculateDamage(newPlayer),
         },
       };
     });

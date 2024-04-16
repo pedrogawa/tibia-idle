@@ -9,10 +9,6 @@ export function PlayerStatus() {
     ((player.currentExperience - calculateLevelExp(player.level)) * 100) /
     (player.experience - calculateLevelExp(player.level));
 
-  const weaponDamage = Math.floor(player.equipment.weapon.status.attack / 3);
-  const levelDamage = Math.floor(player.level / 5);
-  const PLAYER_DAMAGE = levelDamage + weaponDamage + player.skills.attack.level;
-
   return (
     <section className="h-full bg-[#363636] w-64 p-4 rounded-md flex flex-col items-start gap-8">
       <span className="font-bold">Player Status</span>
@@ -22,7 +18,7 @@ export function PlayerStatus() {
       </div>
       <div className="flex w-full items-center justify-between font-bold">
         <p>Damage</p>
-        <span>0 - {PLAYER_DAMAGE}</span>
+        <span>0 - {player.damage}</span>
       </div>
       <div className="flex items-start justify-start flex-col w-full gap-2">
         <span className="font-bold">Experience</span>

@@ -52,13 +52,7 @@ function App() {
   }
 
   function attack() {
-    const weaponDamage = Math.floor(player.equipment.weapon.status.attack / 3);
-    const levelDamage = Math.floor(player.level / 5);
-    const playerDamage = Math.floor(
-      Math.random() *
-        (levelDamage + weaponDamage + player.skills.attack.level - 0) +
-        0
-    );
+    const playerDamage = Math.floor(Math.random() * (player.damage - 0) + 0);
     const nextMonsterHp = monsterHP - playerDamage;
     setDamageTaken(playerDamage);
     if (!!monster.name) {
