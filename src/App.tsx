@@ -27,14 +27,14 @@ function App() {
       setDamageTaken: state.setDamageTaken,
     }));
 
-  const { player, levelUp, gainExperience, takeDamage } = playerStore(
-    (state) => ({
+  const { player, levelUp, gainExperience, takeDamage, skillsTraining } =
+    playerStore((state) => ({
       player: state.player,
       levelUp: state.levelUp,
       gainExperience: state.gainExperience,
       takeDamage: state.takeDamage,
-    })
-  );
+      skillsTraining: state.skillsTraining,
+    }));
 
   const { addDroppedLoot } = lootStore((state) => ({
     droppedLoot: state.droppedLoot,
@@ -55,7 +55,8 @@ function App() {
     const weaponDamage = Math.floor(player.equipment.weapon.status.attack / 3);
     const levelDamage = Math.floor(player.level / 5);
     const playerDamage = Math.floor(
-      Math.random() * (levelDamage + weaponDamage + player.skills.attack - 0) +
+      Math.random() *
+        (levelDamage + weaponDamage + player.skills.attack.level - 0) +
         0
     );
     const nextMonsterHp = monsterHP - playerDamage;
@@ -87,6 +88,7 @@ function App() {
       const potionHP = Math.floor((player.hp * 35) / 100);
 
       takeDamage(nextPlayerHP);
+      skillsTraining();
 
       setDamageDone(true);
       setTimeout(() => {
@@ -104,50 +106,6 @@ function App() {
 
   return (
     <main className="">
-      <section>
-        <table className="table-fixed border-separate border-spacing-2">
-          <thead>
-            <tr>
-              <th className="">#</th>
-              <th>LEVEL</th>
-              <th>%</th>
-              <th>PROGRESS</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <img src="src/assets/The_Calamity.gif" alt="" />
-              </td>
-              <td>1</td>
-              <td>0%</td>
-              <td>
-                <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
-                  <div
-                    className="bg-blue-600 h-1.5 rounded-full dark:bg-blue-500"
-                    style={{ width: `50%` }}
-                  ></div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <img src="src/assets/Blessed_Shield.gif" alt="" />
-              </td>
-              <td>1</td>
-              <td>0%</td>
-              <td>
-                <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
-                  <div
-                    className="bg-blue-600 h-1.5 rounded-full dark:bg-blue-500"
-                    style={{ width: `${50}%` }}
-                  ></div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
       <section className="flex flex-col gap-4">
         {places.map((hunt) => {
           return (
@@ -169,10 +127,6 @@ function App() {
       </section>
       <h2>Combat Simulator</h2>
       <p>Monsters Killed: {monstersKilled}</p>
-      <p>Level: {player.level}</p>
-      <p>
-        {player.currentExperience} / {player.experience}
-      </p>
       <button onClick={() => startHunt(placeId)}>Start Hunt!</button>
       <button onClick={attack}>Attack!</button>
 

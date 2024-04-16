@@ -11,8 +11,14 @@ interface Player {
   backpack: DropItem[];
   equipment: Record<string, any>;
   skills: {
-    attack: number;
-    defense: number;
+    attack: {
+      level: number;
+      percentage: number;
+    };
+    defense: {
+      level: number;
+      percentage: number;
+    };
   };
 }
 
@@ -24,6 +30,7 @@ interface PlayerState {
   lootItems: (items: DropItem[]) => void;
   removeItem: (id: string) => void;
   equipItem: (item: ItemWithStatus) => void;
+  skillsTraining: () => void;
 }
 
 type ItemWithStatus = Item & {
@@ -61,8 +68,14 @@ export const playerStore = create<PlayerState>((set) => ({
       },
     },
     skills: {
-      attack: 10,
-      defense: 10,
+      attack: {
+        level: 10,
+        percentage: 0,
+      },
+      defense: {
+        level: 10,
+        percentage: 0,
+      },
     },
   },
   levelUp: (newLevelExperience: number) =>
@@ -167,6 +180,31 @@ export const playerStore = create<PlayerState>((set) => ({
               status: item.status,
             },
           },
+        },
+      };
+    });
+  },
+  skillsTraining: () => {
+    set((state) => {
+      console.log(state.player);
+      const newStatus = state.player.skills;
+      newStatus.attack.percentage += 0.3;
+      newStatus.defense.percentage += 0.15;
+
+      if (newStatus.attack.percentage >= 100) {
+        newStatus.attack.level++;
+        newStatus.attack.percentage = 0;
+      }
+
+      if (newStatus.defense.percentage >= 100) {
+        newStatus.defense.level++;
+        newStatus.defense.percentage = 0;
+      }
+
+      return {
+        player: {
+          ...state.player,
+          skills: newStatus,
         },
       };
     });
