@@ -12,20 +12,27 @@ import { lootStore } from "./stores/lootStore";
 import { Backpack } from "./component/Backpack";
 import { PlayerHitPoints } from "./component/PlayerHitPoints";
 import { PlayerStatus } from "./component/PlayerStatus";
+import { Task } from "./component/Task";
 
 function App() {
   const [damageDone, setDamageDone] = useState(false);
-  const [placeId, setPlaceId] = useState(0);
-  const [timeoutId, setTimeoutId] = useState<number>(0);
-
-  const { monsterHP, setMonsterHP, monster, setMonster, setDamageTaken } =
-    monsterStore((state) => ({
-      monsterHP: state.monsterHP,
-      setMonsterHP: state.setMonsterHP,
-      monster: state.monster,
-      setMonster: state.setMonster,
-      setDamageTaken: state.setDamageTaken,
-    }));
+  const {
+    monsterHP,
+    setMonsterHP,
+    monster,
+    setMonster,
+    setDamageTaken,
+    huntId,
+    setHuntId,
+  } = monsterStore((state) => ({
+    monsterHP: state.monsterHP,
+    setMonsterHP: state.setMonsterHP,
+    monster: state.monster,
+    setMonster: state.setMonster,
+    setDamageTaken: state.setDamageTaken,
+    huntId: state.huntId,
+    setHuntId: state.setHuntId,
+  }));
 
   const { player, levelUp, gainExperience, takeDamage, skillsTraining } =
     playerStore((state) => ({
@@ -66,7 +73,7 @@ function App() {
         if (nextCurrExp >= nextLevelExp) {
           levelUp(nextNextLevel);
         }
-        const selectedMonster = selectMonster(places[placeId]);
+        const selectedMonster = selectMonster(places[huntId]);
         const lootDropped = generateLoot(monster.loot);
         addDroppedLoot(lootDropped.items);
         setMonster(selectedMonster);
@@ -107,8 +114,8 @@ function App() {
               onClick={() => {
                 const newHunt = hunt.id;
 
-                setPlaceId(newHunt);
-                startHunt(placeId);
+                setHuntId(newHunt);
+                startHunt(huntId);
               }}
               key={hunt.id}
             >
@@ -121,7 +128,7 @@ function App() {
       </section>
       <h2>Combat Simulator</h2>
       <p>Monsters Killed: {monstersKilled}</p>
-      <button onClick={() => startHunt(placeId)}>Start Hunt!</button>
+      <button onClick={() => startHunt(huntId)}>Start Hunt!</button>
       <button onClick={attack}>Attack!</button>
 
       <section className="flex gap-16 items-center justify-between">
@@ -133,10 +140,12 @@ function App() {
           </section>
           <PlayerStatus />
         </section>
-
-        <section className="flex items-start justify-start flex-col gap-8">
-          <MonsterStatus damageDone={damageDone} />
-          <LootDrop />
+        <section className="flex items-start justify-start gap-16">
+          <Task />
+          <section className="flex items-start justify-start gap-8 flex-col">
+            <MonsterStatus damageDone={damageDone} />
+            <LootDrop />
+          </section>
         </section>
       </section>
     </main>

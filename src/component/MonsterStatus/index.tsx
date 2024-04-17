@@ -28,9 +28,9 @@ export function MonsterStatus({ damageDone }: MonsterStatusProps) {
     damageTaken: state.damageTaken,
   }));
 
-  if (!monster) {
+  if (!monster.name) {
     return (
-      <section className="flex items-center justify-center bg-[#363636] p-16 rounded-md">
+      <section className="flex items-center justify-center bg-[#363636] p-16 rounded-md h-80 w-[370px]">
         <div className="flex flex-col items-center justify-center gap-4">
           <h2 className="font-bold">No monster selected</h2>
           <p>HP: -</p>
@@ -39,7 +39,7 @@ export function MonsterStatus({ damageDone }: MonsterStatusProps) {
     );
   } else {
     return (
-      <section className="flex items-center justify-center bg-[#363636] p-16 rounded-md">
+      <section className="flex items-center justify-center bg-[#363636] p-16 rounded-md h-80 w-[370px]">
         <div className="flex flex-col items-center justify-center gap-4 relative">
           <h2 className="font-bold">{monster.name}</h2>
           <p>

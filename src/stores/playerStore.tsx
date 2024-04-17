@@ -113,19 +113,23 @@ export const playerStore = create<PlayerState>((set) => ({
         );
       }
 
+      const newPlayer = {
+        ...state.player,
+        equipment: {
+          ...state.player.equipment,
+          [`${item.type}`]: {
+            id: item.id,
+            name: item.name,
+            src: item.src,
+            status: item.status,
+          },
+        },
+      };
+
       return {
         player: {
-          ...state.player,
-          equipment: {
-            ...state.player.equipment,
-            [`${item.type}`]: {
-              id: item.id,
-              name: item.name,
-              src: item.src,
-              status: item.status,
-            },
-          },
-          damage: calculateDamage(state.player),
+          ...newPlayer,
+          damage: calculateDamage(newPlayer),
         },
       };
     });

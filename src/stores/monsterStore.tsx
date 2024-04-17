@@ -5,12 +5,15 @@ interface MonsterState {
   monsterHP: number;
   setMonsterHP: (newHP: number) => void;
   setMonster: (newMonster: Monster) => void;
+  setHuntId: (id: number) => void;
   monster: Monster;
   damageTaken: number;
   setDamageTaken: (newDamageTaken: number) => void;
+  huntId: number;
 }
 
 export const monsterStore = create<MonsterState>((set) => ({
+  huntId: 0,
   monsterHP: 0,
   damageTaken: 0,
   monster: {
@@ -31,13 +34,14 @@ export const monsterStore = create<MonsterState>((set) => ({
           name: "",
           probability: 0,
           src: "",
-          type: "",
+          type: "gold",
         },
       ],
     },
     src: "",
     experience: 0,
   },
+  setHuntId: (id: number) => set({ huntId: id }),
   setMonsterHP: (newHP: number) => set({ monsterHP: newHP }),
   setMonster: (newMonster: Monster) => set({ monster: newMonster }),
   setDamageTaken: (newDamageTaken: number) =>
