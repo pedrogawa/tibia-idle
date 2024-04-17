@@ -27,6 +27,10 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
     }
   }, [isModalOpen]);
 
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
   return (
     <div
       id="static-modal"
@@ -35,8 +39,16 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
       className={modalClass}
     >
       <div className="relative p-4 w-full max-w-2xl max-h-full">
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 p-2">
-          <span>Modal</span>
+        <div className="flex flex-col relative bg-white rounded-lg shadow dark:bg-gray-700 p-2 gap-8">
+          <button onClick={closeModal}>Close modal</button>
+          <div className="grid items-center justify-center gap-3 grid-cols-5 gap-y-8 h-32 overflow-auto">
+            {places[huntId].monsters.map((monster) => (
+              <div className="transition ease-in-out delay-150 flex flex-col items-center justify-center cursor-pointer p-2 bg-[#1f1f1f] rounded-md gap-3 hover:opacity-75">
+                <img src={monster.monster.src} alt="" />
+                <span>{monster.monster.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
