@@ -1,6 +1,6 @@
 import create from "zustand";
+import { DropItem, Item } from "../interfaces/LootInterface";
 import { calculateDamage } from "../utils/calculateDamage";
-import { Item, DropItem } from "../utils/monsters";
 import { player, Player } from "../utils/player";
 
 interface PlayerState {

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { DropItem } from "../utils/monsters";
+import { DropItem } from "../interfaces/LootInterface";
 
 interface LootState {
   droppedLoot: DropItem[];

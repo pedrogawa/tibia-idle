@@ -1,5 +1,5 @@
 import { playerStore } from "../../stores/playerStore";
-import { isArmorItem, isWeaponItem } from "../../utils/monsters";
+import { isArmorItem, isWeaponItem } from "../../utils/items";
 
 function PlayerEquipment() {
   const { player } = playerStore((state) => ({

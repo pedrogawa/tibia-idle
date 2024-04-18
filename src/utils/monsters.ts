@@ -1,88 +1,41 @@
+import { DropItem, Loot } from "../interfaces/LootInterface";
+import { Monster, MonstersProbability } from "../interfaces/MonsterInterface";
 import { items } from "./items";
 
-interface BaseItem {
-  id: string;
-  name: string;
-  probability: number;
-  type: string;
-  src: string;
-}
+export const veryEasyDifficulty:
+  | "very-easy"
+  | "easy"
+  | "medium"
+  | "hard"
+  | "expert" = "very-easy";
 
-interface FoodItem extends BaseItem {
-  type: "food";
-  status: {
-    regeneration: number;
-  };
-}
+export const easyDifficulty:
+  | "very-easy"
+  | "easy"
+  | "medium"
+  | "hard"
+  | "expert" = "easy";
 
-interface ArmorItem extends BaseItem {
-  type: "helmet" | "armor" | "legs" | "shield";
-  status: {
-    armor: number;
-  };
-}
+export const mediumDifficulty:
+  | "very-easy"
+  | "easy"
+  | "medium"
+  | "hard"
+  | "expert" = "medium";
 
-interface WeaponItem extends BaseItem {
-  type: "weapon";
-  status: {
-    attack: number;
-    defense: number;
-  };
-}
+export const hardDifficulty:
+  | "very-easy"
+  | "easy"
+  | "medium"
+  | "hard"
+  | "expert" = "hard";
 
-export function isWeaponItem(item: any): item is WeaponItem {
-  return (
-    item.type === "weapon" &&
-    item.status !== undefined &&
-    typeof item.status.attack === "number"
-  );
-}
-
-export function isArmorItem(item: any): item is ArmorItem {
-  return (
-    ["helmet", "armor", "legs", "shield"].includes(item.type) &&
-    item.status !== undefined &&
-    typeof item.status.armor === "number"
-  );
-}
-
-export function isFoodItem(item: any): item is FoodItem {
-  return (
-    item.type === "food" &&
-    item.status !== undefined &&
-    typeof item.status.regeneration === "number"
-  );
-}
-
-interface GoldItem extends BaseItem {
-  type: "gold";
-}
-
-export type Item = FoodItem | GoldItem | WeaponItem | ArmorItem;
-
-export type DropItem = Omit<Item, "probability"> & {
-  qty: number;
-};
-
-interface Loot {
-  gold: { id: string; min: number; max: number; src: string };
-  items: Item[];
-}
-
-export interface Monster {
-  name: string;
-  hp: number;
-  minDamage: number;
-  maxDamage: number;
-  loot: Loot;
-  src: string;
-  experience: number;
-}
-
-interface MonstersProbability {
-  monster: Monster;
-  probability: number;
-}
+export const expertDifficulty:
+  | "very-easy"
+  | "easy"
+  | "medium"
+  | "hard"
+  | "expert" = "expert";
 
 interface Hunt {
   id: number;
@@ -106,6 +59,7 @@ const monsters = {
     minDamage: 0,
     maxDamage: 8,
     experience: 5,
+    difficulty: veryEasyDifficulty,
     loot: {
       gold: goldObjectGenerator(0, 4),
       items: [
@@ -123,6 +77,7 @@ const monsters = {
     minDamage: 0,
     maxDamage: 10,
     experience: 10,
+    difficulty: veryEasyDifficulty,
     loot: {
       gold: goldObjectGenerator(0, 2),
       items: [
@@ -144,6 +99,7 @@ const monsters = {
     maxDamage: 10,
     experience: 20,
     src: "src/assets/Troll.gif",
+    difficulty: easyDifficulty,
     loot: {
       gold: goldObjectGenerator(0, 12),
       items: [
@@ -177,6 +133,7 @@ const monsters = {
     maxDamage: 20,
     experience: 50,
     src: "src/assets/Minotaur.gif",
+    difficulty: mediumDifficulty,
     loot: {
       gold: goldObjectGenerator(0, 20),
       items: [

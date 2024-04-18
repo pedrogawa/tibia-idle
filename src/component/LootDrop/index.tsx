@@ -1,6 +1,6 @@
 import { lootStore } from "../../stores/lootStore";
 import { playerStore } from "../../stores/playerStore";
-import { isArmorItem, isWeaponItem, isFoodItem } from "../../utils/monsters";
+import { isArmorItem, isFoodItem, isWeaponItem } from "../../utils/items";
 
 export function LootDrop() {
   const { droppedLoot, clearDroppedLoot } = lootStore((state) => ({

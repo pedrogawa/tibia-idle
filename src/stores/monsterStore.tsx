@@ -1,5 +1,5 @@
 import create from "zustand";
-import { Monster } from "../utils/monsters";
+import { Monster } from "../interfaces/MonsterInterface";
 
 interface MonsterState {
   monsterHP: number;
@@ -21,6 +21,7 @@ export const monsterStore = create<MonsterState>((set) => ({
     hp: 0,
     minDamage: 0,
     maxDamage: 0,
+    difficulty: "very-easy",
     loot: {
       gold: {
         id: "1",

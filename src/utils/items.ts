@@ -1,3 +1,29 @@
+import { ArmorItem, FoodItem, WeaponItem } from "../interfaces/LootInterface";
+
+export function isWeaponItem(item: any): item is WeaponItem {
+  return (
+    item.type === "weapon" &&
+    item.status !== undefined &&
+    typeof item.status.attack === "number"
+  );
+}
+
+export function isArmorItem(item: any): item is ArmorItem {
+  return (
+    ["helmet", "armor", "legs", "shield"].includes(item.type) &&
+    item.status !== undefined &&
+    typeof item.status.armor === "number"
+  );
+}
+
+export function isFoodItem(item: any): item is FoodItem {
+  return (
+    item.type === "food" &&
+    item.status !== undefined &&
+    typeof item.status.regeneration === "number"
+  );
+}
+
 export const foodType:
   | "food"
   | "helmet"
