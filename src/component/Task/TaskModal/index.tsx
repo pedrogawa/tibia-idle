@@ -30,6 +30,32 @@ function calculateProbabilityReward(monster: MonstersProbability) {
   return aux;
 }
 
+function calculateDifficultyReward(monster: MonstersProbability) {
+  let aux = 0;
+
+  if (monster.monster.difficulty === "very-easy") {
+    aux += 5;
+  }
+
+  if (monster.monster.difficulty === "easy") {
+    aux += 10;
+  }
+
+  if (monster.monster.difficulty === "medium") {
+    aux += 15;
+  }
+
+  if (monster.monster.difficulty === "hard") {
+    aux += 20;
+  }
+
+  if (monster.monster.difficulty === "expert") {
+    aux += 25;
+  }
+
+  return 5;
+}
+
 export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
   const [modalClass, setModalClass] = useState(
     "hidden overflow-y-auto overflow-x-hidden fixed top-[50%] right-[50%] left-0 z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full"
@@ -67,11 +93,14 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
   function calculateReward() {
     let rewardExp = 0;
     let rewardProbability = 0;
+    let difficultyBonus = 0;
 
     if (selectedMonster) {
       const baseExp = selectedMonster.monster.experience * 50;
       rewardProbability += calculateProbabilityReward(selectedMonster);
-      const baseProbability = (baseExp * rewardProbability) / 100;
+      difficultyBonus += calculateDifficultyReward(selectedMonster);
+      const baseProbability =
+        (baseExp * (rewardProbability + difficultyBonus)) / 100;
       console.log(baseExp);
 
       rewardExp += baseExp + baseProbability;
