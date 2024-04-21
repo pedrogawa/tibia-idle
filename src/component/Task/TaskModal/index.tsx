@@ -1,66 +1,26 @@
 import { useEffect, useState } from "react";
 import { MonstersProbability } from "../../../interfaces/MonsterInterface";
 import { monsterStore } from "../../../stores/monsterStore";
+import { taskStore } from "../../../stores/taskStore";
 import { places } from "../../../utils/monsters";
+import {
+  calculateDifficultyReward,
+  calculateProbabilityReward,
+} from "../../../utils/task";
 
 interface TaskModal {
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
 }
 
-function calculateProbabilityReward(monster: MonstersProbability) {
-  let aux = 0;
-
-  if (monster.probability > 0 && monster.probability <= 25) {
-    aux += 20;
-  }
-
-  if (monster.probability >= 26 && monster.probability <= 50) {
-    aux += 15;
-  }
-
-  if (monster.probability >= 51 && monster.probability <= 75) {
-    aux += 10;
-  }
-
-  if (monster.probability >= 76) {
-    aux += 5;
-  }
-
-  return aux;
-}
-
-function calculateDifficultyReward(monster: MonstersProbability) {
-  let aux = 0;
-
-  if (monster.monster.difficulty === "very-easy") {
-    aux += 5;
-  }
-
-  if (monster.monster.difficulty === "easy") {
-    aux += 10;
-  }
-
-  if (monster.monster.difficulty === "medium") {
-    aux += 15;
-  }
-
-  if (monster.monster.difficulty === "hard") {
-    aux += 20;
-  }
-
-  if (monster.monster.difficulty === "expert") {
-    aux += 25;
-  }
-
-  return 5;
-}
-
 export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
   const [modalClass, setModalClass] = useState(
-    "hidden overflow-y-auto overflow-x-hidden fixed top-[50%] right-[50%] left-0 z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full"
+    "hidden overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full"
   );
   const [selectedMonster, setSelectedMonster] = useState<MonstersProbability>();
+  const { selectTask } = taskStore((state) => ({
+    selectTask: state.selectTask,
+  }));
 
   const { huntId } = monsterStore((state) => ({
     huntId: state.huntId,
@@ -73,12 +33,10 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
   useEffect(() => {
     if (isModalOpen) {
       setModalClass(
-        "overflow-y-auto overflow-x-hidden fixed top-[50%] right-[50%] left-0 z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full"
+        "overflow-y-auto overflow-x-hidden fixed inset-50 z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full"
       );
     } else {
-      setModalClass(
-        "hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
-      );
+      setModalClass("hidden");
     }
   }, [isModalOpen]);
 
@@ -101,7 +59,6 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
       difficultyBonus += calculateDifficultyReward(selectedMonster);
       const baseProbability =
         (baseExp * (rewardProbability + difficultyBonus)) / 100;
-      console.log(baseExp);
 
       rewardExp += baseExp + baseProbability;
     }
@@ -153,6 +110,13 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
                     <span>{calculateReward()} experience</span>
                   </div>
                 </div>
+                <button
+                  onClick={() => {
+                    selectTask(selectedMonster, calculateReward());
+                  }}
+                >
+                  Confirm task
+                </button>
               </div>
             )}
             {!selectedMonster && <div>No monsters selected</div>}

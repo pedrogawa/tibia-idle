@@ -13,6 +13,7 @@ import { Backpack } from "./component/Backpack";
 import { PlayerHitPoints } from "./component/PlayerHitPoints";
 import { PlayerStatus } from "./component/PlayerStatus";
 import { Task } from "./component/Task";
+import { taskStore } from "./stores/taskStore";
 
 function App() {
   const [damageDone, setDamageDone] = useState(false);
@@ -32,6 +33,11 @@ function App() {
     setDamageTaken: state.setDamageTaken,
     huntId: state.huntId,
     setHuntId: state.setHuntId,
+  }));
+
+  const { task, increaseCurrentKills } = taskStore((state) => ({
+    task: state.task,
+    increaseCurrentKills: state.increaseCurrentKills,
   }));
 
   const { player, levelUp, gainExperience, takeDamage, skillsTraining } =
@@ -78,6 +84,25 @@ function App() {
         addDroppedLoot(lootDropped.items);
         setMonster(selectedMonster);
         setMonsterHP(selectedMonster.hp);
+
+        if (task.isTaskOn) {
+          const isTask = task.monster.monster.name === monster.name;
+
+          if (isTask) {
+            if (task.currentKills < task.kills) {
+              increaseCurrentKills();
+            } else {
+              const nextCurrExp = player.currentExperience + task.reward;
+              gainExperience(nextCurrExp);
+              const nextLevelExp = calculateLevelExp(player.level + 1);
+              const nextNextLevel = calculateLevelExp(player.level + 2);
+
+              if (nextCurrExp >= nextLevelExp) {
+                levelUp(nextNextLevel);
+              }
+            }
+          }
+        }
       } else {
         setMonsterHP(nextMonsterHp);
       }

@@ -1,8 +1,13 @@
 import { useState } from "react";
+import { taskStore } from "../../stores/taskStore";
 import { TaskModal } from "./TaskModal";
 
 export function Task() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { task } = taskStore((state) => ({
+    task: state.task,
+  }));
 
   function toggleModal(isOpen: boolean) {
     setIsModalOpen(isOpen);
@@ -17,6 +22,12 @@ export function Task() {
       >
         Select a task
       </button>
+
+      {!!task.monster.monster.name && (
+        <div>
+          {task.currentKills} / {task.kills}
+        </div>
+      )}
       <TaskModal isModalOpen={isModalOpen} setIsModalOpen={toggleModal} />
     </section>
   );
