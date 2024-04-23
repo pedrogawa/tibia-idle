@@ -15,6 +15,10 @@ import { PlayerStatus } from "./component/PlayerStatus";
 import { Task } from "./component/Task";
 import { taskStore } from "./stores/taskStore";
 
+function levelingUp(player: any, task: any) {
+  console.log(player, task);
+}
+
 function App() {
   const [damageDone, setDamageDone] = useState(false);
   const {
@@ -92,14 +96,15 @@ function App() {
             if (task.currentKills < task.kills) {
               increaseCurrentKills();
             } else {
-              const nextCurrExp = player.currentExperience + task.reward;
-              gainExperience(nextCurrExp);
-              const nextLevelExp = calculateLevelExp(player.level + 1);
-              const nextNextLevel = calculateLevelExp(player.level + 2);
+              levelingUp(player, task);
+              // const nextCurrExp = player.currentExperience + task.reward;
+              // gainExperience(nextCurrExp);
+              // const nextLevelExp = calculateLevelExp(player.level + 1);
+              // const nextNextLevel = calculateLevelExp(player.level + 2);
 
-              if (nextCurrExp >= nextLevelExp) {
-                levelUp(nextNextLevel);
-              }
+              // if (nextCurrExp >= nextLevelExp) {
+              //   levelUp(nextNextLevel);
+              // }
             }
           }
         }
