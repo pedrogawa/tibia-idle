@@ -45,5 +45,5 @@ export function calculateDifficultyReward(monster: MonstersProbability) {
     aux += 25;
   }
 
-  return 5;
+  return aux;
 }

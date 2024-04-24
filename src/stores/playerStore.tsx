@@ -1,12 +1,12 @@
 import create from "zustand";
 import { DropItem, Item } from "../interfaces/LootInterface";
 import { calculateDamage } from "../utils/calculateDamage";
+import { calculateLevelExp } from "../utils/calculateLevelExp";
 import { player, Player } from "../utils/player";
 
 interface PlayerState {
   player: Player;
-  levelUp: (newLevelExperience: number) => void;
-  gainExperience: (newExperience: number) => void;
+  gainExperience: (experience: number) => void;
   takeDamage: (newHP: number) => void;
   lootItems: (items: DropItem[]) => void;
   removeItem: (id: string) => void;
@@ -23,23 +23,32 @@ export const playerStore = create<PlayerState>((set) => ({
     ...player,
     damage: calculateDamage(player),
   },
-  levelUp: (newLevelExperience: number) =>
-    set((state) => ({
-      player: {
-        ...state.player,
-        level: state.player.level + 1,
-        hp: state.player.hp + 15,
-        currentHP: state.player.hp + 15,
-        experience: newLevelExperience,
-      },
-    })),
-  gainExperience: (newExperience: number) =>
-    set((state) => ({
-      player: {
-        ...state.player,
-        currentExperience: newExperience,
-      },
-    })),
+  gainExperience: (experience: number) =>
+    set((state) => {
+      const newPlayer = { ...state.player };
+      const nextLevelExp = calculateLevelExp(newPlayer.level + 1);
+      const nextNextLevel = calculateLevelExp(newPlayer.level + 2);
+
+      const nextExperience = newPlayer.currentExperience + experience;
+
+      if (nextExperience >= nextLevelExp) {
+        newPlayer.currentExperience = nextExperience;
+
+        while (newPlayer.currentExperience > newPlayer.experience) {
+          newPlayer.level = newPlayer.level + 1;
+          newPlayer.experience = calculateLevelExp(newPlayer.level + 1);
+          newPlayer.hp = newPlayer.hp + 15;
+        }
+      } else {
+        newPlayer.currentExperience = nextExperience;
+      }
+
+      return {
+        player: {
+          ...newPlayer,
+        },
+      };
+    }),
   takeDamage: (newHP: number) =>
     set((state) => ({
       player: {

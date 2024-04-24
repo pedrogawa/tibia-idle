@@ -5,7 +5,6 @@ import "./App.css";
 import { MonsterStatus } from "./component/MonsterStatus";
 import { playerStore } from "./stores/playerStore";
 import PlayerEquipment from "./component/PlayerEquipment";
-import { calculateLevelExp } from "./utils/calculateLevelExp";
 import { generateLoot, places, selectMonster } from "./utils/monsters";
 import { LootDrop } from "./component/LootDrop";
 import { lootStore } from "./stores/lootStore";
@@ -14,10 +13,6 @@ import { PlayerHitPoints } from "./component/PlayerHitPoints";
 import { PlayerStatus } from "./component/PlayerStatus";
 import { Task } from "./component/Task";
 import { taskStore } from "./stores/taskStore";
-
-function levelingUp(player: any, task: any) {
-  console.log(player, task);
-}
 
 function App() {
   const [damageDone, setDamageDone] = useState(false);
@@ -44,14 +39,14 @@ function App() {
     increaseCurrentKills: state.increaseCurrentKills,
   }));
 
-  const { player, levelUp, gainExperience, takeDamage, skillsTraining } =
-    playerStore((state) => ({
+  const { player, gainExperience, takeDamage, skillsTraining } = playerStore(
+    (state) => ({
       player: state.player,
-      levelUp: state.levelUp,
       gainExperience: state.gainExperience,
       takeDamage: state.takeDamage,
       skillsTraining: state.skillsTraining,
-    }));
+    })
+  );
 
   const { addDroppedLoot } = lootStore((state) => ({
     droppedLoot: state.droppedLoot,
@@ -76,13 +71,8 @@ function App() {
       if (nextMonsterHp <= 0) {
         setMonsterHP(monster.hp);
         setMonstersKilled((prevCount) => prevCount + 1);
-        const nextCurrExp = player.currentExperience + monster.experience;
-        gainExperience(nextCurrExp);
-        const nextLevelExp = calculateLevelExp(player.level + 1);
-        const nextNextLevel = calculateLevelExp(player.level + 2);
-        if (nextCurrExp >= nextLevelExp) {
-          levelUp(nextNextLevel);
-        }
+        gainExperience(monster.experience);
+
         const selectedMonster = selectMonster(places[huntId]);
         const lootDropped = generateLoot(monster.loot);
         addDroppedLoot(lootDropped.items);
@@ -96,15 +86,7 @@ function App() {
             if (task.currentKills < task.kills) {
               increaseCurrentKills();
             } else {
-              levelingUp(player, task);
-              // const nextCurrExp = player.currentExperience + task.reward;
-              // gainExperience(nextCurrExp);
-              // const nextLevelExp = calculateLevelExp(player.level + 1);
-              // const nextNextLevel = calculateLevelExp(player.level + 2);
-
-              // if (nextCurrExp >= nextLevelExp) {
-              //   levelUp(nextNextLevel);
-              // }
+              gainExperience(task.reward);
             }
           }
         }
