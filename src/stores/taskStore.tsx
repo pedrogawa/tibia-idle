@@ -11,6 +11,7 @@ interface Task {
   };
   increaseCurrentKills: () => void;
   selectTask: (task: MonstersProbability, reward: number) => void;
+  finishTask: () => void;
 }
 
 export const taskStore = create<Task>((set) => ({
@@ -70,6 +71,12 @@ export const taskStore = create<Task>((set) => ({
         task: {
           ...newTask,
         },
+      };
+    }),
+  finishTask: () =>
+    set((state) => {
+      return {
+        task: { ...state.task, isTaskOn: false },
       };
     }),
 }));

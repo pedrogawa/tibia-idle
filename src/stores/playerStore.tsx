@@ -27,7 +27,6 @@ export const playerStore = create<PlayerState>((set) => ({
     set((state) => {
       const newPlayer = { ...state.player };
       const nextLevelExp = calculateLevelExp(newPlayer.level + 1);
-      const nextNextLevel = calculateLevelExp(newPlayer.level + 2);
 
       const nextExperience = newPlayer.currentExperience + experience;
 

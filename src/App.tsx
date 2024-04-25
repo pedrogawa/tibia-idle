@@ -34,9 +34,10 @@ function App() {
     setHuntId: state.setHuntId,
   }));
 
-  const { task, increaseCurrentKills } = taskStore((state) => ({
+  const { task, increaseCurrentKills, finishTask } = taskStore((state) => ({
     task: state.task,
     increaseCurrentKills: state.increaseCurrentKills,
+    finishTask: state.finishTask,
   }));
 
   const { player, gainExperience, takeDamage, skillsTraining } = playerStore(
@@ -83,11 +84,11 @@ function App() {
           const isTask = task.monster.monster.name === monster.name;
 
           if (isTask) {
-            if (task.currentKills < task.kills) {
-              increaseCurrentKills();
-            } else {
+            if (task.currentKills === task.kills) {
               gainExperience(task.reward);
+              finishTask();
             }
+            increaseCurrentKills();
           }
         }
       } else {
