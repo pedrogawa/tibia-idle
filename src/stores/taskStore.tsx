@@ -63,13 +63,12 @@ export const taskStore = create<Task>((set) => ({
     }),
   increaseCurrentKills: () =>
     set((state) => {
-      const newTask = { ...state.task };
-
-      newTask.currentKills++;
+      const newCount = state.task.currentKills + 1;
 
       return {
         task: {
-          ...newTask,
+          ...state.task,
+          currentKills: newCount,
         },
       };
     }),
