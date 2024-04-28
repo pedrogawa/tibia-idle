@@ -166,10 +166,12 @@ export const places: Hunt[] = [
       {
         monster: monsters.rat,
         probability: 95,
+        task: 50,
       },
       {
         monster: monsters.caveRat,
         probability: 5,
+        task: 15,
       },
     ],
   },
@@ -180,10 +182,12 @@ export const places: Hunt[] = [
       {
         monster: monsters.troll,
         probability: 95,
+        task: 50,
       },
       {
         monster: monsters.rat,
         probability: 5,
+        task: 15,
       },
     ],
   },
@@ -194,6 +198,7 @@ export const places: Hunt[] = [
       {
         monster: monsters.minotaur,
         probability: 100,
+        task: 25,
       },
     ],
   },

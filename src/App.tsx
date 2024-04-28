@@ -84,7 +84,7 @@ function App() {
           const isTask = task.monster.monster.name === monster.name;
 
           if (isTask) {
-            if (task.currentKills + 1 === task.kills) {
+            if (task.currentKills + 1 === task.monster.task) {
               gainExperience(task.reward);
               finishTask();
             }

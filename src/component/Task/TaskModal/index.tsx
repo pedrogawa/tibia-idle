@@ -54,7 +54,7 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
     let difficultyBonus = 0;
 
     if (selectedMonster) {
-      const baseExp = selectedMonster.monster.experience * 50;
+      const baseExp = selectedMonster.monster.experience * selectedMonster.task;
       rewardProbability += calculateProbabilityReward(selectedMonster);
       difficultyBonus += calculateDifficultyReward(selectedMonster);
       const baseProbability =
@@ -103,7 +103,7 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
                   </div>
                   <div className="flex gap-2">
                     <span>Quantity:</span>
-                    <span>50</span>
+                    <span>{selectedMonster.task}</span>
                   </div>
                   <div className="flex gap-2">
                     <span>Reward:</span>

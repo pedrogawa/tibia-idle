@@ -14,4 +14,5 @@ export interface Monster {
 export interface MonstersProbability {
   monster: Monster;
   probability: number;
+  task: number;
 }

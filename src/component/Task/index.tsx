@@ -25,7 +25,7 @@ export function Task() {
 
       {!!task.monster.monster.name && (
         <div>
-          {task.currentKills} / {task.kills}
+          {task.currentKills} / {task.monster.task}
         </div>
       )}
       <TaskModal isModalOpen={isModalOpen} setIsModalOpen={toggleModal} />

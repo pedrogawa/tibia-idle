@@ -6,7 +6,6 @@ interface Task {
     monster: MonstersProbability;
     reward: number;
     currentKills: number;
-    kills: number;
     isTaskOn: boolean;
   };
   increaseCurrentKills: () => void;
@@ -44,11 +43,11 @@ export const taskStore = create<Task>((set) => ({
         experience: 0,
       },
       probability: 0,
+      task: 0,
     },
     isTaskOn: false,
     reward: 0,
     currentKills: 0,
-    kills: 10,
   },
   selectTask: (monster: MonstersProbability, reward: number) =>
     set((state) => {
