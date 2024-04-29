@@ -80,16 +80,20 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
             <button onClick={closeModal}>Close modal</button>
           </div>
           <div className="grid items-center justify-center gap-3 grid-cols-5 gap-y-8 h-32 overflow-auto">
-            {places[huntId].monsters.map((monster) => (
-              <div
-                key={crypto.randomUUID()}
-                className="transition ease-in-out delay-150 flex flex-col items-center justify-center cursor-pointer p-2 bg-[#1f1f1f] rounded-md gap-3 hover:opacity-75"
-                onClick={() => selectMonster(monster)}
-              >
-                <img src={monster.monster.src} alt="" />
-                <span>{monster.monster.name}</span>
-              </div>
-            ))}
+            {huntId !== -1 && (
+              <>
+                {places[huntId].monsters.map((monster) => (
+                  <div
+                    key={crypto.randomUUID()}
+                    className="transition ease-in-out delay-150 flex flex-col items-center justify-center cursor-pointer p-2 bg-[#1f1f1f] rounded-md gap-3 hover:opacity-75"
+                    onClick={() => selectMonster(monster)}
+                  >
+                    <img src={monster.monster.src} alt="" />
+                    <span>{monster.monster.name}</span>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
           <div className="flex w-full items-center justify-center">
             {selectedMonster && (

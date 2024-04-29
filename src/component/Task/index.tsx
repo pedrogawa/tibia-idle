@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { monsterStore } from "../../stores/monsterStore";
 import { taskStore } from "../../stores/taskStore";
 import { TaskModal } from "./TaskModal";
 
@@ -9,8 +10,16 @@ export function Task() {
     task: state.task,
   }));
 
+  const { huntId } = monsterStore((state) => ({
+    huntId: state.huntId,
+  }));
+
   function toggleModal(isOpen: boolean) {
-    setIsModalOpen(isOpen);
+    if (huntId !== -1) {
+      setIsModalOpen(isOpen);
+    } else {
+      window.alert("Please select a hunt first.");
+    }
   }
 
   return (

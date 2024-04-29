@@ -13,7 +13,7 @@ interface MonsterState {
 }
 
 export const monsterStore = create<MonsterState>((set) => ({
-  huntId: 0,
+  huntId: -1,
   monsterHP: 0,
   damageTaken: 0,
   monster: {
