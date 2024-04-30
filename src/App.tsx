@@ -54,8 +54,6 @@ function App() {
     addDroppedLoot: state.addDroppedLoot,
   }));
 
-  const [monstersKilled, setMonstersKilled] = useState(0);
-
   function startHunt(id: number) {
     const selectedMonster = selectMonster(places[id]);
 
@@ -71,7 +69,6 @@ function App() {
     if (!!monster.name) {
       if (nextMonsterHp <= 0) {
         setMonsterHP(monster.hp);
-        setMonstersKilled((prevCount) => prevCount + 1);
         gainExperience(monster.experience);
 
         const selectedMonster = selectMonster(places[huntId]);
@@ -139,8 +136,8 @@ function App() {
           );
         })}
       </section>
+      {huntId > -1 && <p>Hunt Selected</p>}
       <h2>Combat Simulator</h2>
-      <p>Monsters Killed: {monstersKilled}</p>
       <button onClick={() => startHunt(huntId)}>Start Hunt!</button>
       <button onClick={attack}>Attack!</button>
 
