@@ -208,7 +208,7 @@ export function selectMonster(place: Hunt): Monster {
   let totalProbability = 0;
   place.monsters.forEach((mp) => (totalProbability += mp.probability));
 
-  let randomThreshold = Math.random() * totalProbability;
+  const randomThreshold = Math.random() * totalProbability;
   let cumulativeProbability = 0;
 
   for (const mp of place.monsters) {
@@ -223,7 +223,7 @@ export function selectMonster(place: Hunt): Monster {
 
 export function generateLoot(loot: Loot): { items: DropItem[] } {
   const gold = Math.floor(
-    Math.random() * (loot.gold.max - loot.gold.min + 1) + loot.gold.min
+    Math.random() * (loot.gold.max - loot.gold.min + 1) + loot.gold.min,
   );
 
   const droppedItems: DropItem[] = loot.items
