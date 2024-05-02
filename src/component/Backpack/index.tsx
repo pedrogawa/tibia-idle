@@ -8,7 +8,7 @@ export function Backpack() {
       takeDamage: state.takeDamage,
       removeItem: state.removeItem,
       equipItem: state.equipItem,
-    })
+    }),
   );
 
   return (
@@ -18,7 +18,7 @@ export function Backpack() {
         {player.backpack.map((item) => {
           return (
             <div
-              className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md relative"
+              className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md relative cursor-pointer"
               key={crypto.randomUUID()}
               onClick={() => {
                 if (item.type === "food") {

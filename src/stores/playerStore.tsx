@@ -49,12 +49,15 @@ export const playerStore = create<PlayerState>((set) => ({
       };
     }),
   takeDamage: (newHP: number) =>
-    set((state) => ({
-      player: {
-        ...state.player,
-        currentHP: newHP,
-      },
-    })),
+    set((state) => {
+      const HP = newHP > state.player.hp ? state.player.hp : newHP;
+      return {
+        player: {
+          ...state.player,
+          currentHP: HP,
+        },
+      };
+    }),
   lootItems: (items) =>
     set((state) => {
       const newLoot = [...state.player.backpack];
@@ -84,7 +87,7 @@ export const playerStore = create<PlayerState>((set) => ({
 
       if (state.player.backpack[index].qty <= 0) {
         state.player.backpack = state.player.backpack.filter(
-          (item) => item.id !== id
+          (item) => item.id !== id,
         );
       }
       return {
@@ -117,7 +120,7 @@ export const playerStore = create<PlayerState>((set) => ({
 
       if (state.player.backpack[index].qty <= 0) {
         state.player.backpack = state.player.backpack.filter(
-          (i) => i.id !== item.id
+          (i) => i.id !== item.id,
         );
       }
 

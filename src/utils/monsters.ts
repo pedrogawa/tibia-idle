@@ -166,7 +166,7 @@ export const places: Hunt[] = [
       {
         monster: monsters.rat,
         probability: 95,
-        task: 50,
+        task: 10,
       },
       {
         monster: monsters.caveRat,

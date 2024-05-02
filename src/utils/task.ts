@@ -1,6 +1,24 @@
-import { MonstersProbability } from "../interfaces/MonsterInterface";
+import { TaskMonster } from "../interfaces/MonsterInterface";
 
-export function calculateProbabilityReward(monster: MonstersProbability) {
+export function calculateReward(monster: TaskMonster) {
+  let rewardExp = 0;
+  let rewardProbability = 0;
+  let difficultyBonus = 0;
+
+  if (monster) {
+    const baseExp = monster.experience * monster.task;
+    rewardProbability += calculateProbabilityReward(monster);
+    difficultyBonus += calculateDifficultyReward(monster);
+    const baseProbability =
+      (baseExp * (rewardProbability + difficultyBonus)) / 100;
+
+    rewardExp += baseExp + baseProbability;
+  }
+
+  return Math.floor(rewardExp);
+}
+
+function calculateProbabilityReward(monster: TaskMonster) {
   let aux = 0;
 
   if (monster.probability > 0 && monster.probability <= 25) {
@@ -22,26 +40,26 @@ export function calculateProbabilityReward(monster: MonstersProbability) {
   return aux;
 }
 
-export function calculateDifficultyReward(monster: MonstersProbability) {
+function calculateDifficultyReward(monster: TaskMonster) {
   let aux = 0;
 
-  if (monster.monster.difficulty === "very-easy") {
+  if (monster.difficulty === "very-easy") {
     aux += 5;
   }
 
-  if (monster.monster.difficulty === "easy") {
+  if (monster.difficulty === "easy") {
     aux += 10;
   }
 
-  if (monster.monster.difficulty === "medium") {
+  if (monster.difficulty === "medium") {
     aux += 15;
   }
 
-  if (monster.monster.difficulty === "hard") {
+  if (monster.difficulty === "hard") {
     aux += 20;
   }
 
-  if (monster.monster.difficulty === "expert") {
+  if (monster.difficulty === "expert") {
     aux += 25;
   }
 

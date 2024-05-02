@@ -6,8 +6,9 @@ import { TaskModal } from "./TaskModal";
 export function Task() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { task } = taskStore((state) => ({
+  const { task, finishTask } = taskStore((state) => ({
     task: state.task,
+    finishTask: state.finishTask,
   }));
 
   const { huntId } = monsterStore((state) => ({
@@ -22,6 +23,10 @@ export function Task() {
     }
   }
 
+  function handleReceiveReward() {
+    finishTask();
+  }
+
   return (
     <section className="bg-[#363636] w-64 p-4 rounded-md flex flex-col items-center gap-8">
       <button
@@ -32,9 +37,13 @@ export function Task() {
         Select a task
       </button>
 
-      {!!task.monster.monster.name && (
-        <div>
+      {task.isTaskOn && (
+        <div className="flex flex-col items-center gap-4">
+          <img src={task.monster.src} alt={task.monster.name} />
           {task.currentKills} / {task.monster.task}
+          {task.currentKills >= task.monster.task && (
+            <button onClick={handleReceiveReward}>Receive reward</button>
+          )}
         </div>
       )}
       <TaskModal isModalOpen={isModalOpen} setIsModalOpen={toggleModal} />

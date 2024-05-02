@@ -25,7 +25,7 @@ export const combatStore = create<CombatState>((set) => ({
         huntId,
       } = monsterStore.getState();
       const { addDroppedLoot } = lootStore.getState();
-      const { task, finishTask, increaseCurrentKills } = taskStore.getState();
+      const { task, increaseCurrentKills } = taskStore.getState();
 
       const playerDamage = Math.floor(Math.random() * (player.damage - 0) + 0);
       const nextMonsterHp = monsterHP - playerDamage;
@@ -41,14 +41,14 @@ export const combatStore = create<CombatState>((set) => ({
           setMonsterHP(selectedMonster.hp);
 
           if (task.isTaskOn) {
-            const isTask = task.monster.monster.name === monster.name;
+            const isTask = task.monster.name === monster.name;
 
             if (isTask) {
-              if (task.currentKills + 1 === task.monster.task) {
+              if (task.currentKills >= task.monster.task) {
                 gainExperience(task.reward);
-                finishTask();
+              } else {
+                increaseCurrentKills();
               }
-              increaseCurrentKills();
             }
           }
         } else {

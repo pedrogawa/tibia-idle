@@ -3,10 +3,7 @@ import { MonstersProbability } from "../../../interfaces/MonsterInterface";
 import { monsterStore } from "../../../stores/monsterStore";
 import { taskStore } from "../../../stores/taskStore";
 import { places } from "../../../utils/monsters";
-import {
-  calculateDifficultyReward,
-  calculateProbabilityReward,
-} from "../../../utils/task";
+import { calculateReward } from "../../../utils/task";
 
 interface TaskModal {
   isModalOpen: boolean;
@@ -15,12 +12,16 @@ interface TaskModal {
 
 export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
   const [modalClass, setModalClass] = useState(
-    "hidden overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full"
+    "hidden overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full",
   );
-  const [selectedMonster, setSelectedMonster] = useState<MonstersProbability>();
-  const { selectTask } = taskStore((state) => ({
-    selectTask: state.selectTask,
-  }));
+  const { task, selectTask, selectMonster, selectedMonster } = taskStore(
+    (state) => ({
+      task: state.task,
+      selectTask: state.selectTask,
+      selectMonster: state.selectMonster,
+      selectedMonster: state.selectedMonster,
+    }),
+  );
 
   const { huntId } = monsterStore((state) => ({
     huntId: state.huntId,
@@ -33,7 +34,7 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
   useEffect(() => {
     if (isModalOpen) {
       setModalClass(
-        "overflow-y-auto overflow-x-hidden fixed inset-50 z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full"
+        "overflow-y-auto overflow-x-hidden fixed inset-50 z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full",
       );
     } else {
       setModalClass("hidden");
@@ -44,26 +45,22 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
     setIsModalOpen(false);
   }
 
-  function selectMonster(monster: MonstersProbability) {
-    setSelectedMonster(monster);
+  function handleSelectMonster(monster: MonstersProbability) {
+    selectMonster({
+      name: monster.monster.name,
+      probability: monster.probability,
+      difficulty: monster.monster.difficulty,
+      task: monster.task,
+      src: monster.monster.src,
+      experience: monster.monster.experience,
+    });
   }
 
-  function calculateReward() {
-    let rewardExp = 0;
-    let rewardProbability = 0;
-    let difficultyBonus = 0;
-
-    if (selectedMonster) {
-      const baseExp = selectedMonster.monster.experience * selectedMonster.task;
-      rewardProbability += calculateProbabilityReward(selectedMonster);
-      difficultyBonus += calculateDifficultyReward(selectedMonster);
-      const baseProbability =
-        (baseExp * (rewardProbability + difficultyBonus)) / 100;
-
-      rewardExp += baseExp + baseProbability;
+  function handleSelectTask() {
+    if (selectedMonster && !task.isTaskOn) {
+      selectTask();
+      closeModal();
     }
-
-    return Math.floor(rewardExp);
   }
 
   return (
@@ -86,7 +83,7 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
                   <div
                     key={crypto.randomUUID()}
                     className="transition ease-in-out delay-150 flex flex-col items-center justify-center cursor-pointer p-2 bg-[#1f1f1f] rounded-md gap-3 hover:opacity-75"
-                    onClick={() => selectMonster(monster)}
+                    onClick={() => handleSelectMonster(monster)}
                   >
                     <img src={monster.monster.src} alt="" />
                     <span>{monster.monster.name}</span>
@@ -98,8 +95,8 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
           <div className="flex w-full items-center justify-center">
             {selectedMonster && (
               <div className="flex flex-col items-center justify-center gap-2">
-                <img src={selectedMonster.monster.src} alt="" />
-                <span>{selectedMonster.monster.name}</span>
+                <img src={selectedMonster.src} alt="" />
+                <span>{selectedMonster.name}</span>
                 <div className="flex flex-col items-start justify-start">
                   <div className="flex gap-2">
                     <span>Difficulty:</span>
@@ -111,19 +108,13 @@ export function TaskModal({ isModalOpen, setIsModalOpen }: TaskModal) {
                   </div>
                   <div className="flex gap-2">
                     <span>Reward:</span>
-                    <span>{calculateReward()} experience</span>
+                    <span>{calculateReward(selectedMonster)} experience</span>
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    selectTask(selectedMonster, calculateReward());
-                  }}
-                >
-                  Confirm task
-                </button>
+                <button onClick={handleSelectTask}>Confirm task</button>
               </div>
             )}
-            {!selectedMonster && <div>No monsters selected</div>}
+            {!task.monster && <div>No monsters selected</div>}
           </div>
         </div>
       </div>

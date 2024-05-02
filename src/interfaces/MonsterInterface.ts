@@ -16,3 +16,12 @@ export interface MonstersProbability {
   probability: number;
   task: number;
 }
+
+export interface TaskMonster {
+  name: string;
+  src: string;
+  difficulty: "very-easy" | "easy" | "medium" | "hard" | "expert";
+  probability: number;
+  task: number;
+  experience: number;
+}

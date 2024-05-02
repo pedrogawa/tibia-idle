@@ -61,7 +61,7 @@ function App() {
           );
         })}
       </section>
-      {huntId > -1 && <p>Hunt Selected</p>}
+      {huntId > -1 && <p>{places[huntId].name}</p>}
       <h2>Combat Simulator</h2>
       <button onClick={() => startHunt(huntId)}>Start Hunt!</button>
       <button onClick={attack}>Attack!</button>

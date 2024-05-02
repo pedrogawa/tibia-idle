@@ -1,63 +1,63 @@
 import { create } from "zustand";
-import { MonstersProbability } from "../interfaces/MonsterInterface";
+import { TaskMonster } from "../interfaces/MonsterInterface";
+import { playerStore } from "./playerStore";
+import { calculateReward } from "../utils/task";
 
 interface Task {
   task: {
-    monster: MonstersProbability;
+    monster: TaskMonster;
     reward: number;
     currentKills: number;
     isTaskOn: boolean;
   };
   increaseCurrentKills: () => void;
-  selectTask: (task: MonstersProbability, reward: number) => void;
+  selectTask: () => void;
   finishTask: () => void;
+  selectMonster: (monster: TaskMonster) => void;
+  selectedMonster: TaskMonster;
 }
 
 export const taskStore = create<Task>((set) => ({
   task: {
     monster: {
-      monster: {
-        name: "",
-        hp: 0,
-        minDamage: 0,
-        maxDamage: 0,
-        difficulty: "very-easy",
-        loot: {
-          gold: {
-            id: "1",
-            min: 0,
-            max: 0,
-            src: "",
-          },
-          items: [
-            {
-              id: "2",
-              name: "",
-              probability: 0,
-              src: "",
-              type: "gold",
-            },
-          ],
-        },
-        src: "",
-        experience: 0,
-      },
+      name: "",
+      difficulty: "very-easy",
       probability: 0,
+      src: "",
       task: 0,
+      experience: 0,
     },
     isTaskOn: false,
     reward: 0,
     currentKills: 0,
   },
-  selectTask: (monster: MonstersProbability, reward: number) =>
+  selectedMonster: {
+    name: "",
+    difficulty: "very-easy",
+    probability: 0,
+    src: "",
+    task: 0,
+    experience: 0,
+  },
+  selectTask: () =>
+    set((state) => {
+      const reward = calculateReward(state.selectedMonster);
+      return {
+        task: {
+          ...state.task,
+          monster: { ...state.selectedMonster },
+          reward: reward,
+          isTaskOn: true,
+        },
+      };
+    }),
+  selectMonster: (monster: TaskMonster) =>
     set((state) => {
       return {
         task: {
           ...state.task,
-          monster: { ...monster },
-          reward: reward,
-          isTaskOn: true,
         },
+        selectedMonster: { ...monster },
       };
     }),
   increaseCurrentKills: () =>
@@ -73,6 +73,12 @@ export const taskStore = create<Task>((set) => ({
     }),
   finishTask: () =>
     set((state) => {
+      const { gainExperience } = playerStore.getState();
+
+      if (state.task.isTaskOn) {
+        gainExperience(state.task.reward);
+      }
+
       return {
         task: { ...state.task, isTaskOn: false },
       };
