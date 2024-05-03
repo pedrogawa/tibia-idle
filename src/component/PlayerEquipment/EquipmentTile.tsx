@@ -10,7 +10,6 @@ export function EquipmentTile({ type }: EquipmentTileProps) {
     player: state.player,
   }));
 
-  console.log(isWeaponItem(player.equipment.weapon), "weapon");
   return (
     <div className="group flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md cursor-pointer relative">
       {type === "weapon" && (
