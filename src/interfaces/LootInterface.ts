@@ -28,17 +28,17 @@ export interface WeaponItem extends BaseItem {
   };
 }
 
-export type DropItem = Omit<Item, "probability"> & {
-  qty: number;
-};
-
 export interface Loot {
   gold: { id: string; min: number; max: number; src: string };
   items: Item[];
 }
 
-interface GoldItem extends BaseItem {
+export interface GoldItem extends BaseItem {
   type: "gold";
 }
 
 export type Item = FoodItem | GoldItem | WeaponItem | ArmorItem;
+
+export type DropItem = Omit<Item, "probability"> & {
+  qty: number;
+};

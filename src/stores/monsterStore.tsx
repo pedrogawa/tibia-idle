@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { Monster } from "../interfaces/MonsterInterface";
 
 interface MonsterState {

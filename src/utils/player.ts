@@ -1,4 +1,4 @@
-import { DropItem } from "./monsters";
+import { DropItem } from "../interfaces/LootInterface";
 import { items } from "./items";
 
 export interface Player {
@@ -31,10 +31,11 @@ export const player = {
   backpack: [],
   equipment: {
     helmet: {
-      id: 0,
-      name: "",
-      src: "",
-      status: {},
+      id: items.leatherHelmet.id,
+      name: items.leatherHelmet.name,
+      src: items.leatherHelmet.src,
+      status: items.leatherHelmet.status,
+      type: items.leatherHelmet.type,
     },
     armor: {
       id: items.jacket.id,
@@ -49,6 +50,13 @@ export const player = {
       src: items.club.src,
       type: items.club.type,
       status: items.club.status,
+    },
+    shield: {
+      id: items.woodenShield.id,
+      name: items.woodenShield.name,
+      src: items.woodenShield.src,
+      type: items.woodenShield.type,
+      status: items.woodenShield.status,
     },
   },
   skills: {

@@ -1,15 +1,15 @@
 import { monsterStore } from "./stores/monsterStore";
 
 import "./App.css";
+import { Backpack } from "./component/Backpack";
+import { LootDrop } from "./component/LootDrop";
 import { MonsterStatus } from "./component/MonsterStatus";
 import PlayerEquipment from "./component/PlayerEquipment";
-import { places, selectMonster } from "./utils/monsters";
-import { LootDrop } from "./component/LootDrop";
-import { Backpack } from "./component/Backpack";
 import { PlayerHitPoints } from "./component/PlayerHitPoints";
 import { PlayerStatus } from "./component/PlayerStatus";
 import { Task } from "./component/Task";
 import { combatStore } from "./stores/combatStore";
+import { places, selectMonster } from "./utils/monsters";
 
 function App() {
   // const [damageDone, setDamageDone] = useState(false);

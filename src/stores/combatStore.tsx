@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { playerStore } from "./playerStore";
 import { monsterStore } from "./monsterStore";
 import { places, generateLoot, selectMonster } from "../utils/monsters";

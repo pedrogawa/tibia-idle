@@ -15,9 +15,7 @@ function PlayerEquipment() {
           <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md">
             {player.equipment.helmet.src && <img src="" alt="" />}
           </div>
-          <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md">
-            <img src={player.equipment.helmet.src} alt="" />
-          </div>
+          <EquipmentTile type="helmet" />
           <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md">
             <img src="src/assets/Backpack.gif" alt="" />
           </div>
@@ -25,9 +23,7 @@ function PlayerEquipment() {
         <div className="flex gap-2">
           <EquipmentTile type="weapon" />
           <EquipmentTile type="armor" />
-          <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md">
-            <img src="src/assets/Wooden_Shield.gif" alt="" />
-          </div>
+          <EquipmentTile type="shield" />
         </div>
         <div className="flex gap-2">
           <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md">

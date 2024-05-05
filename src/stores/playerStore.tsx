@@ -1,5 +1,5 @@
-import create from "zustand";
-import { DropItem, Item } from "../interfaces/LootInterface";
+import { create } from "zustand";
+import { ArmorItem, DropItem, WeaponItem } from "../interfaces/LootInterface";
 import { calculateDamage } from "../utils/calculateDamage";
 import { calculateLevelExp } from "../utils/calculateLevelExp";
 import { player, Player } from "../utils/player";
@@ -14,9 +14,7 @@ interface PlayerState {
   skillsTraining: () => void;
 }
 
-type ItemWithStatus = Item & {
-  status: any;
-};
+type ItemWithStatus = WeaponItem | ArmorItem;
 
 export const playerStore = create<PlayerState>((set) => ({
   player: {
@@ -133,6 +131,7 @@ export const playerStore = create<PlayerState>((set) => ({
             name: item.name,
             src: item.src,
             status: item.status,
+            type: item.type,
           },
         },
       };
