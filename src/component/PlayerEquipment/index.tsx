@@ -1,22 +1,18 @@
-import { playerStore } from "../../stores/playerStore";
 import EquipmentTile from "./EquipmentTile";
 
 function PlayerEquipment() {
-  const { player } = playerStore((state) => ({
-    player: state.player,
-  }));
-
   return (
     <section className="inline-flex items-start justify-start flex-col gap-8 bg-[#363636] p-8 rounded-md">
       <p className="text-white font-bold">Equipments</p>
 
       <div className="flex items-start justify-start flex-col gap-4">
         <div className="flex flex-row gap-2">
-          <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md">
-            {player.equipment.helmet.src && <img src="" alt="" />}
-          </div>
+          <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md"></div>
           <EquipmentTile type="helmet" />
-          <div className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md">
+          <div
+            className="flex items-center justify-center border-solid border-2 border-slate-200 h-12 w-12 rounded-md"
+            onClick={() => console.log("test")}
+          >
             <img src="src/assets/Backpack.gif" alt="" />
           </div>
         </div>

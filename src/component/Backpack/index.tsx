@@ -28,7 +28,7 @@ export function Backpack() {
                   removeItem(item.id);
                 }
 
-                if (item.type === "armor" && isArmorItem(item)) {
+                if (isArmorItem(item)) {
                   const newItem = {
                     ...item,
                     status: item.status,
@@ -37,7 +37,7 @@ export function Backpack() {
                   equipItem(newItem);
                 }
 
-                if (item.type === "weapon" && isWeaponItem(item)) {
+                if (isWeaponItem(item)) {
                   const newItem = {
                     ...item,
                     status: item.status,
