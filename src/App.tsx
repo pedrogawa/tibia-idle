@@ -11,6 +11,7 @@ import { Task } from "./component/Task";
 import { combatStore } from "./stores/combatStore";
 import { places, selectMonster } from "./utils/monsters";
 import Potions from "./component/Potions";
+import Combat from "./component/Combat";
 
 function App() {
   // const [damageDone, setDamageDone] = useState(false);
@@ -75,6 +76,7 @@ function App() {
             <Backpack />
           </section>
           <PlayerStatus />
+          <Combat />
         </section>
         <section className="flex items-start justify-start gap-16">
           <Task />
