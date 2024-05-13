@@ -6,7 +6,7 @@ export function PlayerHitPoints() {
   }));
 
   return (
-    <div className="w-full">
+    <div className="w-60">
       <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
         <div
           className="bg-red-800 h-3 rounded-full dark:bg-red-800"

@@ -15,8 +15,8 @@ import Combat from "./component/Combat";
 
 function App() {
   // const [damageDone, setDamageDone] = useState(false);
-  const { setMonsterHP, setMonster, huntId, setHuntId } = monsterStore(
-    (state) => ({
+  const { setMonsterHP, setMonster, huntId, setHuntId, setMonsters } =
+    monsterStore((state) => ({
       monsterHP: state.monsterHP,
       setMonsterHP: state.setMonsterHP,
       monster: state.monster,
@@ -24,8 +24,8 @@ function App() {
       setDamageTaken: state.setDamageTaken,
       huntId: state.huntId,
       setHuntId: state.setHuntId,
-    }),
-  );
+      setMonsters: state.setMonsters,
+    }));
 
   const { attack } = combatStore((state) => ({
     attack: state.attack,
@@ -35,10 +35,11 @@ function App() {
     if (id === -1) {
       window.alert("You need to select a hunt first!");
     } else {
-      const selectedMonster = selectMonster(places[id]);
-      setMonster(selectedMonster);
-
-      setMonsterHP(selectedMonster.hp);
+      setMonsters();
+      // const selectedMonster = selectMonster(places[id]);
+      // setMonster(selectedMonster);
+      //
+      // setMonsterHP(selectedMonster.hp);
     }
   }
 
@@ -68,7 +69,7 @@ function App() {
       <button onClick={() => startHunt(huntId)}>Start Hunt!</button>
       <button onClick={attack}>Attack!</button>
       <section className="flex gap-16 items-center justify-between">
-        <section className="flex items-start justify-start gap-16">
+        <section className="flex items-start justify-start gap-10">
           <section className="flex items-start justify-start gap-8 flex-col">
             <Potions />
             <PlayerHitPoints />

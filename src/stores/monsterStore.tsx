@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { Monster } from "../interfaces/MonsterInterface";
+import { places, selectMonster } from "../utils/monsters";
 
 interface MonsterState {
   monsterHP: number;
@@ -7,15 +8,18 @@ interface MonsterState {
   setMonster: (newMonster: Monster) => void;
   setHuntId: (id: number) => void;
   monster: Monster;
+  monsters: Monster[];
   damageTaken: number;
   setDamageTaken: (newDamageTaken: number) => void;
   huntId: number;
+  setMonsters: () => void;
 }
 
 export const monsterStore = create<MonsterState>((set) => ({
   huntId: -1,
   monsterHP: 0,
   damageTaken: 0,
+  monsters: [],
   monster: {
     name: "",
     hp: 0,
@@ -42,6 +46,20 @@ export const monsterStore = create<MonsterState>((set) => ({
     src: "",
     experience: 0,
   },
+  setMonsters: () =>
+    set(() => {
+      const selectedMonsters = [];
+      for (let i = 0; i < 8; i++) {
+        const monster = selectMonster(places[0]);
+
+        selectedMonsters.push(monster);
+      }
+
+      console.log("monsters that were selected", selectedMonsters);
+      return {
+        monsters: [...selectedMonsters],
+      };
+    }),
   setHuntId: (id: number) => set({ huntId: id }),
   setMonsterHP: (newHP: number) => set({ monsterHP: newHP }),
   setMonster: (newMonster: Monster) => set({ monster: newMonster }),
