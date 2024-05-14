@@ -18,6 +18,7 @@ export const combatStore = create<CombatState>((set) => ({
         playerStore.getState();
       const {
         monster,
+        monsters,
         monsterHP,
         setMonster,
         setDamageTaken,
