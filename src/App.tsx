@@ -9,7 +9,7 @@ import { PlayerHitPoints } from "./component/PlayerHitPoints";
 import { PlayerStatus } from "./component/PlayerStatus";
 import { Task } from "./component/Task";
 import { combatStore } from "./stores/combatStore";
-import { places, selectMonster } from "./utils/monsters";
+import { places } from "./utils/monsters";
 import Potions from "./component/Potions";
 import Combat from "./component/Combat";
 
