@@ -67,7 +67,6 @@ function App() {
       {huntId > -1 && <p>{places[huntId].name}</p>}
       <h2>Combat Simulator</h2>
       <button onClick={() => startHunt(huntId)}>Start Hunt!</button>
-      <button onClick={attack}>Attack!</button>
       <section className="flex gap-16 items-center justify-between">
         <section className="flex items-start justify-start gap-10">
           <section className="flex items-start justify-start gap-8 flex-col">

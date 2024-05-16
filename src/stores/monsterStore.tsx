@@ -51,17 +51,16 @@ export const monsterStore = create<MonsterState>((set) => ({
     experience: 0,
   },
   setMonsters: () =>
-    set(() => {
+    set((state) => {
       const selectedMonsters: MonsterWithHp[] = [];
       for (let i = 0; i < 8; i++) {
-        const monster = selectMonster(places[0]);
+        const monster = selectMonster(places[state.huntId]);
         selectedMonsters.push({
           ...monster,
           currentHP: monster.hp,
         });
       }
 
-      console.log("monsters that were selected", selectedMonsters);
       return {
         monsters: [...selectedMonsters],
       };

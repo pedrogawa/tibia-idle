@@ -7,32 +7,27 @@ import { taskStore } from "./taskStore";
 
 interface CombatState {
   damageDone: number;
-  attack: () => void;
+  attack: (index: number) => void;
 }
 
 export const combatStore = create<CombatState>((set) => ({
   damageDone: 0,
-  attack: () =>
+  attack: (index: number) =>
     set(() => {
       const { player, gainExperience, takeDamage, skillsTraining } =
         playerStore.getState();
-      const {
-        monster,
-        monsters,
-        monsterHP,
-        setMonster,
-        setDamageTaken,
-        setMonsterHP,
-        huntId,
-      } = monsterStore.getState();
+      const { monsters, setMonster, setMonsterHP, huntId } =
+        monsterStore.getState();
+      const monster = monsters[index];
+      console.log("attack is being called!", monsters[index]);
       const { addDroppedLoot } = lootStore.getState();
       const { task, increaseCurrentKills } = taskStore.getState();
-
+      //
       const playerDamage = Math.floor(Math.random() * (player.damage - 0) + 0);
-      const nextMonsterHp = monsterHP - playerDamage;
-      setDamageTaken(playerDamage);
+      const nextMonsterHP = monster.currentHP - playerDamage;
+      // setDamageTaken(playerDamage);
       if (monster.name) {
-        if (nextMonsterHp <= 0) {
+        if (nextMonsterHP <= 0) {
           gainExperience(monster.experience);
 
           const selectedMonster = selectMonster(places[huntId]);
@@ -53,7 +48,7 @@ export const combatStore = create<CombatState>((set) => ({
             }
           }
         } else {
-          setMonsterHP(nextMonsterHp);
+          monster.currentHP = nextMonsterHP;
         }
         const monsterDamage = Math.floor(
           Math.random() * (monster.maxDamage - monster.minDamage) +
