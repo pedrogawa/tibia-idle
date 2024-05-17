@@ -8,7 +8,7 @@ type MonsterWithHp = Monster & {
 
 interface MonsterState {
   monsterHP: number;
-  setMonsterHP: (newHP: number) => void;
+  setMonsterHP: (newHP: number, index: number) => void;
   setMonster: (newMonster: Monster) => void;
   setHuntId: (id: number) => void;
   monster: Monster;
@@ -66,7 +66,12 @@ export const monsterStore = create<MonsterState>((set) => ({
       };
     }),
   setHuntId: (id: number) => set({ huntId: id }),
-  setMonsterHP: (newHP: number) => set({ monsterHP: newHP }),
+  setMonsterHP: (newHP: number, index: number) =>
+    set((state) => {
+      const newMonsters = { ...state.monsters };
+      newMonsters[index].currentHP = newHP;
+      return { monsters: { ...newMonsters } };
+    }),
   setMonster: (newMonster: Monster) => set({ monster: newMonster }),
   setDamageTaken: (newDamageTaken: number) =>
     set({ damageTaken: newDamageTaken }),
