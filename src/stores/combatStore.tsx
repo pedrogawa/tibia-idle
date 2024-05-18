@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { playerStore } from "./playerStore";
 import { monsterStore } from "./monsterStore";
-import { places, generateLoot, selectMonster } from "../utils/monsters";
+import { generateLoot } from "../utils/monsters";
 import { lootStore } from "./lootStore";
 import { taskStore } from "./taskStore";
 
@@ -16,15 +16,13 @@ export const combatStore = create<CombatState>((set) => ({
     set(() => {
       const { player, gainExperience, takeDamage, skillsTraining } =
         playerStore.getState();
-      const { monsters, setMonster, setMonsterHP, huntId } =
-        monsterStore.getState();
+      const { monsters, setMonster, setMonsterHP } = monsterStore.getState();
       const monster = monsters[index];
       const { addDroppedLoot } = lootStore.getState();
       const { task, increaseCurrentKills } = taskStore.getState();
       setMonster(monster);
       const playerDamage = Math.floor(Math.random() * (player.damage - 0) + 0);
       const nextMonsterHP = monster.currentHP - playerDamage;
-      // setDamageTaken(playerDamage);
       if (monster.name) {
         if (nextMonsterHP <= 0) {
           gainExperience(monster.experience);
@@ -47,14 +45,22 @@ export const combatStore = create<CombatState>((set) => ({
         } else {
           setMonsterHP(nextMonsterHP, index);
         }
-        const monsterDamage = Math.floor(
-          Math.random() * (monster.maxDamage - monster.minDamage) +
-            monster.minDamage,
-        );
-        const nextPlayerHP = player.currentHP - monsterDamage;
-        const potionHP = Math.floor((player.hp * 35) / 100);
+        let turnDamage = 0;
+        const test = 0;
+        for (let i = test; i < monsters.length; i++) {
+          const monsterDamage = Math.floor(
+            Math.random() * (monsters[i].maxDamage - monsters[i].minDamage) +
+              monster.minDamage,
+          );
+          console.log("dentro do loop", turnDamage);
+          turnDamage += monsterDamage;
+        }
+        console.log("turnDamage", turnDamage, monsters);
+        const nextPlayerHP = player.currentHP - turnDamage;
 
         takeDamage(nextPlayerHP);
+        const potionHP = Math.floor((player.hp * 35) / 100);
+
         skillsTraining();
 
         // setDamageDone(true);

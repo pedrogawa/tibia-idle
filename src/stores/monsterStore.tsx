@@ -68,9 +68,9 @@ export const monsterStore = create<MonsterState>((set) => ({
   setHuntId: (id: number) => set({ huntId: id }),
   setMonsterHP: (newHP: number, index: number) =>
     set((state) => {
-      const newMonsters = { ...state.monsters };
+      const newMonsters = [...state.monsters];
       newMonsters[index].currentHP = newHP;
-      return { monsters: { ...newMonsters } };
+      return { monsters: [...newMonsters] };
     }),
   setMonster: (newMonster: Monster) => set({ monster: newMonster }),
   setDamageTaken: (newDamageTaken: number) =>

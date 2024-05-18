@@ -8,7 +8,6 @@ import PlayerEquipment from "./component/PlayerEquipment";
 import { PlayerHitPoints } from "./component/PlayerHitPoints";
 import { PlayerStatus } from "./component/PlayerStatus";
 import { Task } from "./component/Task";
-import { combatStore } from "./stores/combatStore";
 import { places } from "./utils/monsters";
 import Potions from "./component/Potions";
 import Combat from "./component/Combat";
@@ -27,10 +26,6 @@ function App() {
       setMonsters: state.setMonsters,
     }));
 
-  const { attack } = combatStore((state) => ({
-    attack: state.attack,
-  }));
-
   function startHunt(id: number) {
     if (id === -1) {
       window.alert("You need to select a hunt first!");
@@ -48,16 +43,16 @@ function App() {
       <section className="flex flex-col gap-4">
         {places.map((hunt) => {
           return (
-            <div
-              onClick={() => {
-                const newHunt = hunt.id;
+            <div key={hunt.id}>
+              <button
+                onClick={() => {
+                  const newHunt = hunt.id;
 
-                setHuntId(newHunt);
-                startHunt(newHunt);
-              }}
-              key={hunt.id}
-            >
-              <button className="flex items-center justify-center w-48">
+                  setHuntId(newHunt);
+                  startHunt(newHunt);
+                }}
+                className="flex items-center justify-center w-48"
+              >
                 {hunt.name}
               </button>
             </div>
