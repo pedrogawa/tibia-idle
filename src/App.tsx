@@ -14,17 +14,16 @@ import Combat from "./component/Combat";
 
 function App() {
   // const [damageDone, setDamageDone] = useState(false);
-  const { setMonsterHP, setMonster, huntId, setHuntId, setMonsters } =
-    monsterStore((state) => ({
-      monsterHP: state.monsterHP,
-      setMonsterHP: state.setMonsterHP,
-      monster: state.monster,
-      setMonster: state.setMonster,
-      setDamageTaken: state.setDamageTaken,
-      huntId: state.huntId,
-      setHuntId: state.setHuntId,
-      setMonsters: state.setMonsters,
-    }));
+  const { huntId, setHuntId, setMonsters } = monsterStore((state) => ({
+    monsterHP: state.monsterHP,
+    setMonsterHP: state.setMonsterHP,
+    monster: state.monster,
+    setMonster: state.setMonster,
+    setDamageTaken: state.setDamageTaken,
+    huntId: state.huntId,
+    setHuntId: state.setHuntId,
+    setMonsters: state.setMonsters,
+  }));
 
   function startHunt(id: number) {
     if (id === -1) {

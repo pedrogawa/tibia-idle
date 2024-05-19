@@ -16,7 +16,8 @@ export const combatStore = create<CombatState>((set) => ({
     set(() => {
       const { player, gainExperience, takeDamage, skillsTraining } =
         playerStore.getState();
-      const { monsters, setMonster, setMonsterHP } = monsterStore.getState();
+      const { monsters, setMonster, setMonsterHP, removeMonsterImmutable } =
+        monsterStore.getState();
       const monster = monsters[index];
       const { addDroppedLoot } = lootStore.getState();
       const { task, increaseCurrentKills } = taskStore.getState();
@@ -30,7 +31,7 @@ export const combatStore = create<CombatState>((set) => ({
           const lootDropped = generateLoot(monster.loot);
           addDroppedLoot(lootDropped.items);
           setMonsterHP(0, index);
-
+          removeMonsterImmutable();
           if (task.isTaskOn) {
             const isTask = task.monster.name === monster.name;
 
@@ -52,10 +53,8 @@ export const combatStore = create<CombatState>((set) => ({
             Math.random() * (monsters[i].maxDamage - monsters[i].minDamage) +
               monster.minDamage,
           );
-          console.log("dentro do loop", turnDamage);
           turnDamage += monsterDamage;
         }
-        console.log("turnDamage", turnDamage, monsters);
         const nextPlayerHP = player.currentHP - turnDamage;
 
         takeDamage(nextPlayerHP);

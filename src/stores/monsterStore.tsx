@@ -17,6 +17,7 @@ interface MonsterState {
   setDamageTaken: (newDamageTaken: number) => void;
   huntId: number;
   setMonsters: () => void;
+  removeMonsterImmutable: () => void;
 }
 
 export const monsterStore = create<MonsterState>((set) => ({
@@ -63,6 +64,21 @@ export const monsterStore = create<MonsterState>((set) => ({
 
       return {
         monsters: [...selectedMonsters],
+      };
+    }),
+  removeMonsterImmutable: () =>
+    set((state) => {
+      const newMonsters = [...state.monsters].filter(
+        (monster) => monster.currentHP > 0,
+      );
+
+      if (newMonsters.length <= 0) {
+        state.setMonsters();
+        return {};
+      }
+
+      return {
+        monsters: [...newMonsters],
       };
     }),
   setHuntId: (id: number) => set({ huntId: id }),
