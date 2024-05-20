@@ -11,6 +11,8 @@ import { Task } from "./component/Task";
 import { places } from "./utils/monsters";
 import Potions from "./component/Potions";
 import Combat from "./component/Combat";
+import { combatStore } from "./stores/combatStore";
+import { useEffect } from "react";
 
 function App() {
   // const [damageDone, setDamageDone] = useState(false);
@@ -25,16 +27,38 @@ function App() {
     setMonsters: state.setMonsters,
   }));
 
+  const { startAttacking, isAttacking, attack } = combatStore((state) => ({
+    startAttacking: state.startAttacking,
+    isAttacking: state.isAttacking,
+    attack: state.attack,
+  }));
+
+  useEffect(() => {
+    let interval;
+    if (isAttacking) {
+      interval = setInterval(() => {
+        attack(0); // replace 0 with the index of the monster you want to attack
+      }, 200); // attack every 1 second
+    }
+    return () => clearInterval(interval);
+  }, [isAttacking, attack]);
+
   function startHunt(id: number) {
     if (id === -1) {
       window.alert("You need to select a hunt first!");
     } else {
       setMonsters();
+      startAttacking(true);
+
       // const selectedMonster = selectMonster(places[id]);
       // setMonster(selectedMonster);
       //
       // setMonsterHP(selectedMonster.hp);
     }
+  }
+
+  function stopHunt() {
+    startAttacking(false);
   }
 
   return (
@@ -61,6 +85,7 @@ function App() {
       {huntId > -1 && <p>{places[huntId].name}</p>}
       <h2>Combat Simulator</h2>
       <button onClick={() => startHunt(huntId)}>Start Hunt!</button>
+      <button onClick={() => stopHunt()}>Stop hunt!</button>
       <section className="flex gap-16 items-center justify-between">
         <section className="flex items-start justify-start gap-10">
           <section className="flex items-start justify-start gap-8 flex-col">

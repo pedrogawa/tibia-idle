@@ -3,6 +3,7 @@ import { ArmorItem, DropItem, WeaponItem } from "../interfaces/LootInterface";
 import { calculateDamage } from "../utils/calculateDamage";
 import { calculateLevelExp } from "../utils/calculateLevelExp";
 import { player, Player } from "../utils/player";
+import { monsterStore } from "./monsterStore";
 
 interface PlayerState {
   player: Player;
@@ -146,9 +147,10 @@ export const playerStore = create<PlayerState>((set) => ({
   },
   skillsTraining: () => {
     set((state) => {
+      const { monsters } = monsterStore.getState();
       const newStatus = state.player.skills;
       newStatus.attack.percentage += 25;
-      newStatus.defense.percentage += 0.15;
+      newStatus.defense.percentage += 0.15 * monsters.length;
 
       if (newStatus.attack.percentage >= 100) {
         newStatus.attack.level++;

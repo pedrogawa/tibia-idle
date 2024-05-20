@@ -7,11 +7,20 @@ import { taskStore } from "./taskStore";
 
 interface CombatState {
   damageDone: number;
+  isAttacking: boolean;
+  startAttacking: (status: boolean) => void;
   attack: (index: number) => void;
 }
 
 export const combatStore = create<CombatState>((set) => ({
   damageDone: 0,
+  isAttacking: false,
+  startAttacking: (status: boolean) =>
+    set(() => {
+      return {
+        isAttacking: status,
+      };
+    }),
   attack: (index: number) =>
     set(() => {
       const { player, gainExperience, takeDamage, skillsTraining } =
